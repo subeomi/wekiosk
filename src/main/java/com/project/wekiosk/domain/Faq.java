@@ -15,7 +15,7 @@ public class Faq {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qno;
 
-    private String qname;
+    private String qtitle;
 
     private String qcontent;
 
