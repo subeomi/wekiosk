@@ -22,4 +22,12 @@ public class Faq {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public void changeQtitle(String qtitle) {
+        this.qtitle = qtitle;
+    }
+
+    public void changeQcontent(String qcontent) {
+        this.qcontent = qcontent;
+    }
+
 }
