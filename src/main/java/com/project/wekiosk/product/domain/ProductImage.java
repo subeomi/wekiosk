@@ -23,5 +23,5 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_pno") // 외래키 지정
-    private Product product;
+    private Product1 product;
 }

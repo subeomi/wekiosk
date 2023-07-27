@@ -1,6 +1,7 @@
 package com.project.wekiosk.product.repository;
 
 
+import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.page.dto.PageRequestDTO;
 import com.project.wekiosk.page.dto.PageResponseDTO;
 import com.project.wekiosk.product.domain.Product1;
@@ -10,11 +11,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ProductRepository extends JpaRepository<Product1, Long>{
 
 
     @Query("select p.pname, p.pprice from Product1 p where p.pno = :pno")
     Product1 selectOne(@Param("pno") Long pno);
 
+    List<Product1> findByCategory(Category category);
 
 }

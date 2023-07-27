@@ -14,9 +14,8 @@ public class CategoryTests {
     @Test
     public void insertCategory() {
         Category category = Category.builder()
-                .cateno(1L)
                 .catename("TestCategory")
-                .sno(100L)
+                .sno(2L)
                 .build();
 
         categoryRepository.save(category);
