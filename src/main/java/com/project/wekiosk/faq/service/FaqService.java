@@ -1,8 +1,8 @@
-package com.project.wekiosk.faq;
+package com.project.wekiosk.faq.service;
 
-import com.project.wekiosk.faq.FaqDTO;
-import com.project.wekiosk.faq.PageRequestDTO;
-import com.project.wekiosk.faq.PageResponseDTO;
+import com.project.wekiosk.faq.dto.FaqDTO;
+import com.project.wekiosk.faq.dto.PageRequestDTO;
+import com.project.wekiosk.faq.dto.PageResponseDTO;
 import jakarta.transaction.Transactional;
 
 @Transactional

@@ -1,6 +1,6 @@
 package com.project.wekiosk.store.service;
 
-import com.project.wekiosk.store.Store;
+import com.project.wekiosk.store.domain.Store;
 import com.project.wekiosk.store.dto.StoreDTO;
 import com.project.wekiosk.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;

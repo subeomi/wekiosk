@@ -1,6 +1,6 @@
-package com.project.wekiosk.member;
+package com.project.wekiosk.member.service;
 
-import com.project.wekiosk.member.MemberDTO;
+import com.project.wekiosk.member.dto.MemberDTO;
 import jakarta.transaction.Transactional;
 
 @Transactional

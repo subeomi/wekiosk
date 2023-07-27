@@ -1,6 +1,6 @@
-package com.project.wekiosk.store;
+package com.project.wekiosk.store.domain;
 
-import com.project.wekiosk.member.Member;
+import com.project.wekiosk.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

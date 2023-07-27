@@ -1,11 +1,11 @@
-package com.project.wekiosk.faq.search;
+package com.project.wekiosk.faq.repository.search;
 
 
-import com.project.wekiosk.faq.QFaq;
-import com.project.wekiosk.faq.Faq;
-import com.project.wekiosk.faq.FaqDTO;
-import com.project.wekiosk.faq.PageRequestDTO;
-import com.project.wekiosk.faq.PageResponseDTO;
+import com.project.wekiosk.faq.domain.QFaq;
+import com.project.wekiosk.faq.domain.Faq;
+import com.project.wekiosk.faq.dto.FaqDTO;
+import com.project.wekiosk.faq.dto.PageRequestDTO;
+import com.project.wekiosk.faq.dto.PageResponseDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;

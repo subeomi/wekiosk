@@ -1,4 +1,4 @@
-package com.project.wekiosk.member;
+package com.project.wekiosk.member.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

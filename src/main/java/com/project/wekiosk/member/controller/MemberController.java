@@ -1,5 +1,7 @@
-package com.project.wekiosk.member;
+package com.project.wekiosk.member.controller;
 
+import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;

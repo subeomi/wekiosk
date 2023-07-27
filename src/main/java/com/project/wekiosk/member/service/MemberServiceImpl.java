@@ -1,5 +1,8 @@
-package com.project.wekiosk.member;
+package com.project.wekiosk.member.service;
 
+import com.project.wekiosk.member.domain.Member;
+import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;

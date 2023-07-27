@@ -1,6 +1,5 @@
 package com.project.wekiosk.store.controller;
 
-import com.project.wekiosk.member.MemberDTO;
 import com.project.wekiosk.store.dto.StoreDTO;
 import com.project.wekiosk.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
