@@ -22,7 +22,7 @@ public class FaqTests {
     @Test
     public void testInsert(){
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 121; i++){
             Faq faq = Faq.builder()
                     .qtitle("자주 묻는 질문 테스트"+i+"번")
                     .qcontent(i+"번 내용")

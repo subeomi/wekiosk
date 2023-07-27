@@ -60,7 +60,8 @@ public class FaqSearchImpl extends QuerydslRepositorySupport implements FaqSearc
         JPQLQuery<FaqDTO> listQuery = query.select(
                 Projections.bean(FaqDTO.class,
                         faq.qno,
-                        faq.qtitle
+                        faq.qtitle,
+                        faq.qcontent
                 )
         );
 
