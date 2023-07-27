@@ -1,12 +1,9 @@
-package com.project.wekiosk.faq.service;
+package com.project.wekiosk.faq;
 
-import com.project.wekiosk.domain.Faq;
-import com.project.wekiosk.faq.dto.FaqDTO;
-import com.project.wekiosk.faq.dto.PageRequestDTO;
-import com.project.wekiosk.faq.dto.PageResponseDTO;
+import com.project.wekiosk.faq.FaqDTO;
+import com.project.wekiosk.faq.PageRequestDTO;
+import com.project.wekiosk.faq.PageResponseDTO;
 import jakarta.transaction.Transactional;
-
-import java.util.Map;
 
 @Transactional
 public interface FaqService {

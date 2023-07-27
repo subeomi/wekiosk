@@ -1,4 +1,4 @@
-package com.project.wekiosk.faq.dto;
+package com.project.wekiosk.faq;
 
 import lombok.Builder;
 import lombok.Data;

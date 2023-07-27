@@ -1,8 +1,5 @@
-package com.project.wekiosk.member.controller;
+package com.project.wekiosk.member;
 
-import com.project.wekiosk.faq.dto.FaqDTO;
-import com.project.wekiosk.member.dto.MemberDTO;
-import com.project.wekiosk.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,23 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("")
+
+    @PostMapping("login")
+    public MemberDTO login(@RequestBody MemberDTO memberDTO){
+
+        log.info("Parameter: " + memberDTO);
+
+        MemberDTO result = memberService.login(
+                memberDTO.getMemail(),
+                memberDTO.getMpw()
+        );
+
+        log.info("Return: " + result);
+
+        return result;
+    }
+
+    @PostMapping("regist")
     public Map<String, String> regist(@RequestBody MemberDTO memberDTO){
 
         log.info(memberDTO);
@@ -33,7 +46,7 @@ public class MemberController {
         return memberService.getOne(memail);
     }
 
-    @PutMapping("modi")
+    @PutMapping("modify")
     public Map<String, String> pwModify(@RequestBody MemberDTO memberDTO){
 
         memberService.pwModifier(memberDTO);

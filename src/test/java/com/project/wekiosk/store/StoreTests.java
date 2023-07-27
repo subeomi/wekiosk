@@ -1,8 +1,7 @@
 package com.project.wekiosk.store;
 
-import com.project.wekiosk.domain.Member;
-import com.project.wekiosk.domain.Store;
-import com.project.wekiosk.member.repository.MemberRepository;
+import com.project.wekiosk.member.Member;
+import com.project.wekiosk.member.MemberRepository;
 import com.project.wekiosk.store.repository.StoreRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;

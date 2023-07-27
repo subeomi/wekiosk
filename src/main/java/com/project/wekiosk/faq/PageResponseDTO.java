@@ -1,4 +1,4 @@
-package com.project.wekiosk.faq.dto;
+package com.project.wekiosk.faq;
 
 import java.util.List;
 import java.util.stream.IntStream;

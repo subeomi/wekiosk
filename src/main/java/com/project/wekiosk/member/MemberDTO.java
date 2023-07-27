@@ -1,4 +1,4 @@
-package com.project.wekiosk.member.dto;
+package com.project.wekiosk.member;
 
 import jakarta.persistence.Id;
 import lombok.*;

@@ -1,9 +1,7 @@
 package com.project.wekiosk.faq;
 
-import com.project.wekiosk.domain.Faq;
-import com.project.wekiosk.domain.Member;
-import com.project.wekiosk.faq.repository.FaqRepository;
-import com.project.wekiosk.member.repository.MemberRepository;
+//import com.project.wekiosk.domain.Faq;
+import com.project.wekiosk.member.MemberRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

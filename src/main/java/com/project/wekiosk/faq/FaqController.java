@@ -1,9 +1,5 @@
-package com.project.wekiosk.faq.controller;
+package com.project.wekiosk.faq;
 
-import com.project.wekiosk.faq.dto.FaqDTO;
-import com.project.wekiosk.faq.dto.PageRequestDTO;
-import com.project.wekiosk.faq.dto.PageResponseDTO;
-import com.project.wekiosk.faq.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;

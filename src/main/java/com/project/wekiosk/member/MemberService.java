@@ -1,6 +1,6 @@
-package com.project.wekiosk.member.service;
+package com.project.wekiosk.member;
 
-import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.MemberDTO;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -13,4 +13,6 @@ public interface MemberService {
     void pwModifier(MemberDTO memberDTO);
 
     void delete(String memail);
+
+    MemberDTO login(String memail, String mpw);
 }

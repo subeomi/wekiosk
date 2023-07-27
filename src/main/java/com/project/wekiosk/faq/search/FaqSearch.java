@@ -1,8 +1,8 @@
-package com.project.wekiosk.faq.repository.search;
+package com.project.wekiosk.faq.search;
 
-import com.project.wekiosk.faq.dto.FaqDTO;
-import com.project.wekiosk.faq.dto.PageRequestDTO;
-import com.project.wekiosk.faq.dto.PageResponseDTO;
+import com.project.wekiosk.faq.FaqDTO;
+import com.project.wekiosk.faq.PageRequestDTO;
+import com.project.wekiosk.faq.PageResponseDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

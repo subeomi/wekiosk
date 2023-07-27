@@ -1,4 +1,4 @@
-package com.project.wekiosk.domain;
+package com.project.wekiosk.member;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +21,9 @@ public class Member {
 
     private int mgrade;
 
-    // 회원의 상태. -1 = 계정 정지, 0 = 활성화, 1 = 회원 탈퇴(비활성화)
+    // 회원의 상태. -1 = 계정 정지,
+    //             0 = 활성화,
+    //             1 = 회원 탈퇴(비활성화)
     private int mstatus;
 
     public void changeMpw(String mpw) {

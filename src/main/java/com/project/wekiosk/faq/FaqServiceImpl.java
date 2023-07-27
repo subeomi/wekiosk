@@ -1,16 +1,11 @@
-package com.project.wekiosk.faq.service;
+package com.project.wekiosk.faq;
 
-import com.project.wekiosk.domain.Faq;
-import com.project.wekiosk.faq.dto.FaqDTO;
-import com.project.wekiosk.faq.dto.PageRequestDTO;
-import com.project.wekiosk.faq.dto.PageResponseDTO;
-import com.project.wekiosk.faq.repository.FaqRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
