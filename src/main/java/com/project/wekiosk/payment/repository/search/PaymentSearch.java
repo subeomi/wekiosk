@@ -1,12 +1,8 @@
-package com.project.wekiosk.payment.search;
+package com.project.wekiosk.payment.repository.search;
 
-import com.project.wekiosk.payment.Payment;
 import com.project.wekiosk.payment.dto.PageRequestDTO;
 import com.project.wekiosk.payment.dto.PageResponseDTO;
 import com.project.wekiosk.payment.dto.PaymentListDTO;
-
-import java.time.LocalDate;
-import java.util.List;
 
 public interface PaymentSearch {
 

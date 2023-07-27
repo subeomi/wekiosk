@@ -1,4 +1,4 @@
-package com.project.wekiosk.order;
+package com.project.wekiosk.order.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

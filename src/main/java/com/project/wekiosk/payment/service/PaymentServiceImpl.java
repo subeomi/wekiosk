@@ -1,13 +1,13 @@
-package com.project.wekiosk.payment;
+package com.project.wekiosk.payment.service;
 
-import com.project.wekiosk.order.OrdersRepository;
+import com.project.wekiosk.payment.domain.Payment;
 import com.project.wekiosk.payment.dto.*;
+import com.project.wekiosk.payment.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package com.project.wekiosk.payment;
+package com.project.wekiosk.payment.service;
 
 import com.project.wekiosk.payment.dto.*;
 import jakarta.transaction.Transactional;

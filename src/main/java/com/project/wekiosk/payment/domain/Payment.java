@@ -1,10 +1,9 @@
-package com.project.wekiosk.payment;
+package com.project.wekiosk.payment.domain;
 
-import com.project.wekiosk.order.Orders;
+import com.project.wekiosk.order.domain.Orders;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 

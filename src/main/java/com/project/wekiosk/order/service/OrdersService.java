@@ -1,4 +1,4 @@
-package com.project.wekiosk.order;
+package com.project.wekiosk.order.service;
 
 import com.project.wekiosk.order.dto.OrderDTO;
 import com.project.wekiosk.payment.dto.PaymentDTO;

@@ -1,11 +1,9 @@
 package com.project.wekiosk.repositoryTests;
 
 import com.project.wekiosk.domain.Store;
-import com.project.wekiosk.order.OrderDetail;
-import com.project.wekiosk.order.Orders;
-import com.project.wekiosk.order.OrdersRepository;
+import com.project.wekiosk.order.domain.Orders;
+import com.project.wekiosk.order.repository.OrdersRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

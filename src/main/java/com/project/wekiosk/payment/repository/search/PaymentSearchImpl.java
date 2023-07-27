@@ -1,9 +1,11 @@
-package com.project.wekiosk.payment.search;
+package com.project.wekiosk.payment.repository.search;
 
 
-import com.project.wekiosk.order.QOrders;
-import com.project.wekiosk.payment.Payment;
-import com.project.wekiosk.payment.QPayment;
+
+import com.project.wekiosk.order.domain.QOrders;
+import com.project.wekiosk.payment.domain.Payment;
+
+import com.project.wekiosk.payment.domain.QPayment;
 import com.project.wekiosk.payment.dto.PageRequestDTO;
 import com.project.wekiosk.payment.dto.PageResponseDTO;
 import com.project.wekiosk.payment.dto.PaymentListDTO;
@@ -14,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class PaymentSearchImpl extends QuerydslRepositorySupport implements PaymentSearch {

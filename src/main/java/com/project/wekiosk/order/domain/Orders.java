@@ -1,4 +1,4 @@
-package com.project.wekiosk.order;
+package com.project.wekiosk.order.domain;
 
 import com.project.wekiosk.domain.Store;
 import jakarta.persistence.*;

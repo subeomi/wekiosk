@@ -1,5 +1,6 @@
-package com.project.wekiosk.order;
+package com.project.wekiosk.order.controller;
 
+import com.project.wekiosk.order.service.OrdersService;
 import com.project.wekiosk.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

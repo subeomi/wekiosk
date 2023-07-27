@@ -1,14 +1,8 @@
-package com.project.wekiosk.payment;
+package com.project.wekiosk.payment.repository;
 
-import com.project.wekiosk.payment.Payment;
-import com.project.wekiosk.payment.dto.PageResponseDTO;
+import com.project.wekiosk.payment.domain.Payment;
 
-import com.project.wekiosk.payment.dto.PaymentDTO;
-import com.project.wekiosk.payment.search.PaymentSearch;
-import jakarta.persistence.Entity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.project.wekiosk.payment.repository.search.PaymentSearch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

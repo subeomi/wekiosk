@@ -1,20 +1,15 @@
 package com.project.wekiosk.repositoryTests;
 
-import com.project.wekiosk.order.Orders;
-import com.project.wekiosk.payment.Payment;
-import com.project.wekiosk.payment.PaymentRepository;
-import com.project.wekiosk.payment.dto.PaymentDTO;
+import com.project.wekiosk.payment.domain.Payment;
+import com.project.wekiosk.payment.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest

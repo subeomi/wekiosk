@@ -1,5 +1,6 @@
-package com.project.wekiosk.payment;
+package com.project.wekiosk.payment.controller;
 
+import com.project.wekiosk.payment.service.PaymentService;
 import com.project.wekiosk.payment.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

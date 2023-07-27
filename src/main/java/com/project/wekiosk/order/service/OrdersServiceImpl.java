@@ -1,7 +1,8 @@
-package com.project.wekiosk.order;
+package com.project.wekiosk.order.service;
 
+import com.project.wekiosk.order.domain.Orders;
 import com.project.wekiosk.order.dto.OrderDTO;
-import com.project.wekiosk.payment.dto.PaymentDTO;
+import com.project.wekiosk.order.repository.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
