@@ -1,5 +1,6 @@
 package com.project.wekiosk.order.domain;
 
+import com.project.wekiosk.product.domain.Product1;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,12 +9,12 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "product")
 public class OrderDetail {
 
     private int quantity;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product1 product;
 
 }

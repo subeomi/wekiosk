@@ -3,6 +3,7 @@ package com.project.wekiosk.order.service;
 import com.project.wekiosk.order.domain.Orders;
 import com.project.wekiosk.order.dto.OrderDTO;
 import com.project.wekiosk.order.repository.OrdersRepository;
+import com.project.wekiosk.product.domain.Product1;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,7 @@ public class OrdersServiceImpl implements OrdersService{
 
         Orders orders = modelMapper.map(orderDTO, Orders.class);
 
-        orderDTO.getQuantity().forEach(q -> orders.addOrderDetail(q));
-
         return repository.save(orders).getOno();
-
     }
+
 }

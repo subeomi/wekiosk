@@ -20,10 +20,6 @@ public class PaymentController {
     @GetMapping("/list")
     public PageResponseDTO<PaymentListDTO> list(PageRequestDTO requestDTO) {
 
-        log.info("listController-----------------");
-        log.info(">>>>req: " + requestDTO);
-        log.info(">>>>list: " + service.list(requestDTO));
-
         return service.list(requestDTO);
     }
 
@@ -50,7 +46,10 @@ public class PaymentController {
     @GetMapping("/sales")
     public List<Long> getSales(@RequestParam("year") int year, @RequestParam("month") int month){
 
-        return service.getSales(year, month);
+        Long lastMonth = service.getLastMonthSales(year, month-1);
+        List<Long> Sales = service.getSales(year, month);
+        Sales.add(0, lastMonth);
+        return Sales;
     }
 
 }

@@ -22,6 +22,8 @@ public class PaymentListDTO {
 
     private LocalDateTime pay_date;
 
-//    private List<String> pname;
+    private String pname;
+
+    private long pcount;
 
 }

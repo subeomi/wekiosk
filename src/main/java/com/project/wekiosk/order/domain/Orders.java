@@ -1,6 +1,7 @@
 package com.project.wekiosk.order.domain;
 
 import com.project.wekiosk.domain.Store;
+import com.project.wekiosk.product.domain.Product1;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,9 +30,12 @@ public class Orders {
     @Builder.Default
     private List<OrderDetail> Details = new ArrayList<>();
 
-    public void addOrderDetail(int count) {
+    public void addOrderDetail(int count, Product1 product) {
 
-        OrderDetail detail = OrderDetail.builder().quantity(count).build();
+        OrderDetail detail = OrderDetail.builder()
+                .quantity(count)
+                .product(product)
+                .build();
 
         Details.add(detail);
 

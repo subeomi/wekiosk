@@ -1,11 +1,13 @@
 package com.project.wekiosk.payment.dto;
 
+import com.project.wekiosk.product.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,5 +26,7 @@ public class PaymentDTO {
     private LocalDateTime pay_date;
 
     private int ostatus;
+
+    private List<ProductDTO> products;
 
 }
