@@ -69,4 +69,9 @@ public class MemberController {
         return Map.of("result", "삭제완료");
     }
 
+    @GetMapping("duplicate/{memail}")
+    public int duplicateCheck(@PathVariable("memail") String memail){
+
+        return memberService.duplicateCheck(memail);
+    }
 }

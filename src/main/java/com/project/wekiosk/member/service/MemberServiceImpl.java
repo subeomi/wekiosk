@@ -58,6 +58,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public int duplicateCheck(String memail) {
+
+        Optional<Member> result = memberRepository.findById(memail);
+
+        return result.isPresent() ? 1 : 0;
+    }
+
+    @Override
     public String register(MemberDTO memberDTO) {
 
         Member member = modelMapper.map(memberDTO, Member.class);
