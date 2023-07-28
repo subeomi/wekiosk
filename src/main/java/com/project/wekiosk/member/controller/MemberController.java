@@ -1,5 +1,6 @@
 package com.project.wekiosk.member.controller;
 
+import com.project.wekiosk.fcm.service.FcmNotificationService;
 import com.project.wekiosk.member.dto.MemberDTO;
 import com.project.wekiosk.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
+    private final FcmNotificationService fcmNotificationService;
 
 
     @PostMapping("login")
@@ -27,6 +29,8 @@ public class MemberController {
                 memberDTO.getMemail(),
                 memberDTO.getMpw()
         );
+
+        fcmNotificationService.sendLoginInfo(memberDTO.getMemail());
 
         log.info("Return: " + result);
 
