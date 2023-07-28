@@ -4,6 +4,7 @@ import com.project.wekiosk.order.domain.Orders;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(exclude = "orders")
 @Table(name = "payment")
-//@EntityListeners(value = {AuditingEntityListener.class})
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Payment {
 
     @Id

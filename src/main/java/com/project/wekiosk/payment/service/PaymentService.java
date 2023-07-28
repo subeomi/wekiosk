@@ -18,4 +18,6 @@ public interface PaymentService {
 
     List<Long> getSales(int year, int month);
 
+    Long getLastMonthSales(int year, int month);
+
 }
