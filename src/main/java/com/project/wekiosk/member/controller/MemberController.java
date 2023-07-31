@@ -53,7 +53,7 @@ public class MemberController {
         return memberService.getOne(memail);
     }
 
-    @PutMapping("modify")
+    @PutMapping("pw")
     public Map<String, String> pwModify(@RequestBody MemberDTO memberDTO){
 
         memberService.pwModifier(memberDTO);
@@ -73,5 +73,15 @@ public class MemberController {
     public int duplicateCheck(@PathVariable("memail") String memail){
 
         return memberService.duplicateCheck(memail);
+    }
+
+    @PostMapping("emailConfirm")
+    public Map<String, Object> emailConfirm(@RequestParam String memail) throws Exception {
+
+        memail = memail.trim();
+
+        log.info("Email Confirm..." + memail);
+
+        return memberService.sendSimpleMessage(memail);
     }
 }
