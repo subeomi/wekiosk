@@ -12,6 +12,7 @@ import java.util.Map;
 @RequestMapping("/api/store/")
 @RequiredArgsConstructor
 @Log4j2
+@CrossOrigin
 public class StoreController {
 
     private final StoreService storeService;

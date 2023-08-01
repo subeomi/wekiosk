@@ -14,6 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/faq/")
 @RequiredArgsConstructor
 @Log4j2
+@CrossOrigin
 public class FaqController {
 
     private final FaqService faqService;
