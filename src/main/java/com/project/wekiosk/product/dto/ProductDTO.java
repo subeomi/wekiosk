@@ -27,6 +27,8 @@ public class ProductDTO {
     private List<MultipartFile> images;
     private Long pno;// 상품 이미지 파일 리스트
 
+    private int quantity;
+
 
     // Product1DTO를 Product1 엔티티로 변환하는 메서드
     public Product1 toEntity(Category category) {
