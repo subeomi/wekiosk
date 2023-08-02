@@ -9,7 +9,7 @@ public interface CategoryService {
 
     CategoryDTO getCategoryById(Long cateno);
 
-    void registerCategory(CategoryDTO categoryDTO);
+    void saveCategory(CategoryDTO categoryDTO);
 
     void updateCategory(CategoryDTO categoryDTO);
 
