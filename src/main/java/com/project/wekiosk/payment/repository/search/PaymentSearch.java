@@ -6,6 +6,6 @@ import com.project.wekiosk.payment.dto.PaymentListDTO;
 
 public interface PaymentSearch {
 
-    PageResponseDTO<PaymentListDTO> list(Long sno, PageRequestDTO pageRequestDTO);
+    PageResponseDTO<PaymentListDTO> list(PageRequestDTO pageRequestDTO);
 
 }

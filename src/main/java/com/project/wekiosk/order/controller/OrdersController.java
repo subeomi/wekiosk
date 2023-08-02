@@ -12,7 +12,6 @@ import java.util.Map;
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 @Log4j2
-@CrossOrigin
 public class OrdersController {
 
     private final OrdersService ordersService;
@@ -23,11 +22,11 @@ public class OrdersController {
     }
 
     @PutMapping("")
-    public Map<String, Integer> modify(@RequestBody OrderDTO orderDTO){
+    public Map<String, String> modify(@RequestBody OrderDTO orderDTO){
 
         log.info("c>>>>>>>>>>>>>>>>>>>>" + orderDTO);
         ordersService.modifyOs(orderDTO);
 
-        return Map.of("result", orderDTO.getOstatus());
+        return Map.of("result", "OK");
     }
 }

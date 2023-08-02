@@ -28,7 +28,7 @@ public class PaymentSearchImpl extends QuerydslRepositorySupport implements Paym
     }
 
     @Override
-    public PageResponseDTO<PaymentListDTO> list(Long sno, PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<PaymentListDTO> list(PageRequestDTO pageRequestDTO) {
 
         QPayment payment = QPayment.payment;
         QOrders orders = QOrders.orders;
@@ -40,27 +40,22 @@ public class PaymentSearchImpl extends QuerydslRepositorySupport implements Paym
         query.leftJoin(payment.orders.Details, detail);
         query.leftJoin(detail.product, product);
 
-        query.where(orders.store.sno.eq(sno));
-
         int pageNum = pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1;
 
-        Pageable pageable = PageRequest.of(pageNum, pageRequestDTO.getSize());
+        Pageable pageable = PageRequest.of(pageNum, pageRequestDTO.getSize(), Sort.by("payno").descending());
 
         this.getQuerydsl().applyPagination(pageable, query);
 
         query.groupBy(payment);
 
-        query.orderBy(payment.pay_date.desc());
-
         JPQLQuery<PaymentListDTO> dtoQuery = query.select(Projections.bean(
                 PaymentListDTO.class,
                 payment.payno,
-                payment.total_price.min().as("total_price"),
+                payment.total_price.sum().as("total_price"),
                 payment.pay_status.min().as("pay_status"),
                 payment.pay_date.min().as("pay_date"),
                 product.pname.min().as("pname"),
-                product.pname.count().as("pcount"),
-                orders.ostatus));
+                product.pname.count().as("pcount")));
 
         List<PaymentListDTO> dtoList = dtoQuery.fetch();
 

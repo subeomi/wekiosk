@@ -30,10 +30,9 @@ public class PageResponseDTO<E> {
         this.size = pageRequestDTO.getSize();
 
         // 현재페이지 13 -> 1.3 -> 2.0
-//        int tempEnd = (int) (Math.ceil(page / 10.0) * 10);
-        int tempEnd = (page%5 != 0 ? page + 5 - (page % 5) : page);
-//        this.start = tempEnd - 9;
-        this.start = tempEnd - 4;
+        int tempEnd = (int) (Math.ceil(page / 10.0) * 10);
+
+        this.start = tempEnd - 9;
         this.prev = this.start != 1;
 
         // 20 17.8
