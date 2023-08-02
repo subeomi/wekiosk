@@ -56,14 +56,17 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(productDTO.getCateno())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. cateno=" + productDTO.getCateno()));
 
-        Long savedPno = setProduct(productDTO);
+        Long savedPno = setProduct(productDTO); // setProduct() 메서드를 호출하여 상품과 옵션들을 데이터베이스에 저장하고, 생성한 상품의 pno 값을 얻습니다.
         Product1 savedProduct = productRepository.findById(savedPno)
                 .orElseThrow(() -> new NoSuchElementException("생성한 상품을 찾을 수 없습니다. pno=" + savedPno));
 
         // 상품과 카테고리 연관 관계 설정
         savedProduct.setCategory(category);
 
-        return savedProduct.getPno();
+        // 실제로는 상품 정보와 옵션들을 데이터베이스에 저장하는 로직을 구현해야 합니다.
+        // 이후에 productRepository.save(savedProduct)와 같은 로직을 사용하여 실제 데이터베이스에 저장합니다.
+
+        return savedProduct.getPno(); // 생성한 상품의 pno를 반환합니다.
     }
 
 
@@ -168,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
             existingProduct.setImages(newProductImages);
         }
 
+        // 상품 엔티티를 데이터베이스에 저장합니다.
         productRepository.save(existingProduct);
     }
 

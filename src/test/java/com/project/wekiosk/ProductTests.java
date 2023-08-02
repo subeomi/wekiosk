@@ -1,5 +1,6 @@
 package com.project.wekiosk;//package com.project.wekiosk;
 
+import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.product.domain.Product1;
 import com.project.wekiosk.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -19,20 +20,20 @@ public class ProductTests {
     ProductRepository repo;
 
      @Test
-     public void testInsert(){
+     public void testInsert() {
+         Category category = new Category(1L);
 
-         for(int i = 0; i < 10; i++){
+         for (int i = 0; i < 10; i++) {
              Product1 product = Product1.builder()
                      .pname("Example Product")
                      .pprice(10000L)
+                     .category(category) // 영속 상태의 Category 엔티티를 설정
                      .build();
 
-             product.addImage(UUID.randomUUID().toString()+"_aaa.jpg");
-             product.addImage(UUID.randomUUID().toString()+"_bbb.jpg");
-             product.addImage(UUID.randomUUID().toString()+"_ccc.jpg");
+             product.addImage(UUID.randomUUID().toString() + "_aaa.jpg");
 
              repo.save(product);
-         }//end for
+         }
      }
     @Transactional
     @Test
