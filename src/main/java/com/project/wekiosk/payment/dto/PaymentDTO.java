@@ -29,6 +29,4 @@ public class PaymentDTO {
 
     private List<ProductDTO> products;
 
-    private Long ono;
-
 }
