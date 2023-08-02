@@ -1,6 +1,4 @@
 package com.project.wekiosk.product.domain;
-
-
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -19,9 +17,13 @@ public class ProductImage {
 
     private int ord;
 
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_pno") // 외래키 지정
+    @JoinColumn(name = "pno") // 외래키 지정
     private Product1 product;
+
+    public ProductImage(Product1 product, String fname) {
+        this.product = product;
+        this.fname = fname;
+    }
+
 }

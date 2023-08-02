@@ -39,7 +39,7 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
                                 product.pno,
                                 product.pname,
                                 product.pprice,
-                                product.pimage)
+                                product.images)
                 );
         List<ProductListDTO> dtoList = dtoQuery.fetch();
 
