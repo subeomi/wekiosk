@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -113,5 +115,14 @@ public class PaymentTests {
 //        List<Long> list = repository.findByMonth(2023,7);
 //
 //        list.forEach(sale -> log.info(sale));
+    }
+
+    @Test
+    public void testCount(){
+
+        LocalDate lc = LocalDate.of(2023, 7, 27);
+//        log.info(">>>>test" + repository.tsaleCount(1L, lc.getYear(), lc.getMonthValue(), lc.getDayOfMonth()));
+//        List<Object[]> list = repository.oStatusCount(1L, lc.getYear(), lc.getMonthValue(), lc.getDayOfMonth());
+
     }
 }
