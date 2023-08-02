@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +18,17 @@ public class StoreController {
 
     private final StoreService storeService;
 
+
+    @GetMapping("list/{memail}")
+    public List<StoreDTO> getList(@PathVariable("memail") String memail){
+
+        log.info("----------------------");
+        log.info(memail);
+        List<StoreDTO> result = storeService.getList(memail);
+        log.info(result);
+
+        return result;
+    }
 
     @PostMapping("regist")
     public Map<String, String> regist(@RequestBody StoreDTO storeDTO){

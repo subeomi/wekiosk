@@ -1,5 +1,8 @@
 package com.project.wekiosk.store.service;
 
+import com.project.wekiosk.faq.dto.FaqDTO;
+import com.project.wekiosk.faq.dto.PageRequestDTO;
+import com.project.wekiosk.faq.dto.PageResponseDTO;
 import com.project.wekiosk.store.domain.Store;
 import com.project.wekiosk.store.dto.StoreDTO;
 import com.project.wekiosk.store.repository.StoreRepository;
@@ -8,7 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -18,6 +23,16 @@ public class StoreServiceImpl implements StoreService{
     private final StoreRepository storeRepository;
     private final ModelMapper modelMapper;
 
+
+    @Override
+    public List<StoreDTO> getList(String memail) {
+
+        List<Store> stores = storeRepository.getListByEmail(memail);
+        // Store 엔티티를 StoreDTO로 변환하여 리스트로 반환합니다.
+        return stores.stream()
+                .map(store -> modelMapper.map(store, StoreDTO.class))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String register(StoreDTO storeDTO) {
