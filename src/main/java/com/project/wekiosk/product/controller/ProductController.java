@@ -1,96 +1,102 @@
 package com.project.wekiosk.product.controller;
 
-import com.project.wekiosk.option.dto.OptionsDTO;
+import com.project.wekiosk.category.domain.Category;
+import com.project.wekiosk.category.repository.CategoryRepository;
 import com.project.wekiosk.product.domain.Product1;
 import com.project.wekiosk.product.dto.ProductDTO;
+import com.project.wekiosk.product.repository.ProductRepository;
 import com.project.wekiosk.product.service.ProductService;
 import com.project.wekiosk.util.FileUploader;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @CrossOrigin
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/category/")
+@RequestMapping("/api/product/")
 @Log4j2
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductService service;
 
     private final FileUploader uploader;
 
+    private final ProductRepository productRepository;
 
-    @PostMapping("{cateno}/products")
-    public ResponseEntity<Long> register(@PathVariable Long cateno, @ModelAttribute ProductDTO productDTO) {
-        try {
-            productDTO.setCateno(cateno);
+    private final CategoryRepository categoryRepository;
+    @PostMapping("")
+    public Map<String, Long> register(@RequestBody ProductDTO productDTO) {
+        log.info("-------------------------");
+        log.info(productDTO);
 
-            // 기존 productDTO에 options 정보를 설정
-            List<OptionsDTO> optionsList = productDTO.getOptions();
-            productDTO.setOptions(optionsList);
+        List<String> fileNames = uploader.uploadFiles(productDTO.getFiles(), true);
+        productDTO.setImages(fileNames);
 
-            for (OptionsDTO optionsDTO : optionsList) {
-                optionsDTO.setPno(productDTO.getPno());
-            }
+        Long cateno = productDTO.getCateno();
 
-            Long registeredProduct = productService.register(productDTO);
-            log.info(productDTO);
-            // 결과 반환
-            return ResponseEntity.ok(registeredProduct);
-        } catch (Exception e) {
-            // 오류 처리
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
+        Product1 product = Product1.builder()
+                .pname(productDTO.getPname())
+                .pprice(productDTO.getPprice())
+                .build();
+
+        Category category = categoryRepository.findByCateno(cateno);
+
+
+        product.setCategory(category);
+
+
+        Long pno = service.register(productDTO);
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("pno", pno);
+
+        return response;
+    }
+
+    @DeleteMapping("{pno}")
+    public Map<String, Long> delete(@PathVariable("pno") Long pno){
+
+        log.info("PNO" + pno);
+        service.remove(pno);
+        return Map.of("result",pno);
     }
 
 
-    @DeleteMapping("products/{pno}/delete")
-    public ResponseEntity<Map<String, Long>> removeProduct(@PathVariable Long pno) {
-        productService.remove(pno);
-        return ResponseEntity.ok(Collections.singletonMap("pno", pno));
-    }
+    @GetMapping("{pno}")
+    public ProductDTO getOne(@PathVariable("pno")Long pno){
 
-    @GetMapping("{cateno}/products")
-    public ResponseEntity<List<Product1>> getProductsByCategory(@PathVariable Long cateno) {
-        List<Product1> products = productService.getProductsByCategory(cateno);
-        return ResponseEntity.ok(products);
-    }
-
-
-    @GetMapping("{cateno}/products/{pno}")
-    public ResponseEntity<ProductDTO> getOne(@PathVariable("cateno") Long cateno, @PathVariable("pno") Long pno) {
-        log.info("-------------------------------------");
-        log.info("Cateno-" + cateno);
         log.info("PNO-" + pno);
-        log.info("-------------------------------------");
-        ProductDTO productDTO = productService.readOneInCategory(cateno, pno);
 
-        return ResponseEntity.ok(productDTO);
+        return service.readOne(pno);
     }
 
 
-    @PutMapping("{cateno}/products/{pno}/modify")
-    public ResponseEntity<?> updateProduct(@PathVariable Long pno, @RequestBody ProductDTO productDTO) {
-        try {
+    @PostMapping("modify")
+    public Map<String, Long> modify( ProductDTO productDTO){
+        log.info("----------------------------");
+        log.info(productDTO);
 
-            System.out.println("pno: " + pno);
-            System.out.println("productDTO: " + productDTO);
+        if(productDTO.getFiles() != null && productDTO.getFiles().size() > 0) {
 
-            productService.modifyProduct(pno, productDTO);
-            return ResponseEntity.ok().build(); // 성공 응답
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build(); // 해당 상품을 찾지 못한 경우
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 기타 오류 발생 시
+            List<String> uploadFileNames = uploader.uploadFiles(productDTO.getFiles(), true);
+
+            List<String> oldFileNames = productDTO.getImages();
+
+            uploadFileNames.forEach(fname -> oldFileNames.add(fname));
         }
+
+        log.info("------------------------------");
+        log.info(productDTO);
+
+        return Map.of("result", 111L);
+
+
     }
 }

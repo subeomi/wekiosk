@@ -11,6 +11,4 @@ public class CategoryDTO {
     private Long cateno;
     private String catename;
     private Long sno;
-
-
 }
