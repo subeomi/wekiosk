@@ -1,13 +1,11 @@
 package com.project.wekiosk.payment.controller;
 
-import com.google.gson.Gson;
 import com.project.wekiosk.payment.service.PaymentService;
 import com.project.wekiosk.payment.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,21 +13,15 @@ import java.util.Map;
 @Log4j2
 @RequiredArgsConstructor
 @RequestMapping("/api/payment")
-@CrossOrigin
 public class PaymentController {
 
     private final PaymentService service;
 
-    @GetMapping("/list/{sno}")
-    public PageResponseDTO<PaymentListDTO> list(@PathVariable("sno") Long sno, PageRequestDTO requestDTO) {
+    @GetMapping("/list")
+    public PageResponseDTO<PaymentListDTO> list(PageRequestDTO requestDTO) {
 
-        return service.list(sno, requestDTO);
+        return service.list(requestDTO);
     }
-
-//    @GetMapping("/count/{sno}")
-//    public Long count(@PathVariable("sno") Long sno, @RequestParam("date") LocalDate date){
-//
-//    }
 
     @GetMapping("/{payno}")
     public PaymentDTO getOne(@PathVariable("payno") Long payno) {
@@ -51,10 +43,13 @@ public class PaymentController {
         return Map.of("result", "success");
     }
 
-    @GetMapping("/sales/{sno}")
-    public Map<String, Long> getSales(@PathVariable("sno") Long sno, @RequestParam("date") LocalDate date){
+    @GetMapping("/sales")
+    public List<Long> getSales(@RequestParam("year") int year, @RequestParam("month") int month){
 
-        return service.getSales(sno, date);
+        Long lastMonth = service.getLastMonthSales(year, month-1);
+        List<Long> Sales = service.getSales(year, month);
+        Sales.add(0, lastMonth);
+        return Sales;
     }
 
 }
