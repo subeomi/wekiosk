@@ -26,4 +26,6 @@ public class PaymentListDTO {
 
     private long pcount;
 
+    private int ostatus;
+
 }
