@@ -4,6 +4,7 @@ import com.project.wekiosk.product.domain.Product1;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @Entity
+
 public class Category {
 
     @Id
@@ -24,6 +26,15 @@ public class Category {
         this.cateno = cateno;
     }
 
-    @OneToMany(mappedBy = "category") // 양방향 매핑을 위한 mappedBy 설정
-    private List<Product1> products;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Product1> products = new ArrayList<>();
+
+    public void setCatename(String catename){
+        this.catename = catename;
+    }
+
+    public void setCateno(Long cateno) {
+        this.cateno = cateno;
+    }
 }
