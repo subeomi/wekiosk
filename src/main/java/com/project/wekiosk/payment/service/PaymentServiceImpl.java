@@ -81,10 +81,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         Map<String, Long> salesMap = new HashMap<>();
 
-        // 해당 일 판매 건수
-//        Long saleCount = repository.saleCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-//        salesMap.put("saleCount", saleCount);
-
         // 해당 일 결제 상태 건수 // [결제완료, 환불]
         repository.pStatusCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .forEach(result -> {
@@ -111,7 +107,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 전달 월 매출 합계
         date = date.minusMonths(1);
+
         Long lastSale = repository.lastMonthSale(sno, date.getYear(), date.getMonthValue());
+
         salesMap.put(date.toString().substring(0, 7), lastSale == null ? 0L : lastSale);
 
         return salesMap;
