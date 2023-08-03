@@ -62,6 +62,7 @@ public class ProductController {
     @GetMapping("{cateno}/products")
     public ResponseEntity<List<Product1>> getProductsByCategory(@PathVariable Long cateno) {
         List<Product1> products = productService.getProductsByCategory(cateno);
+        log.info(products);
         return ResponseEntity.ok(products);
     }
 
