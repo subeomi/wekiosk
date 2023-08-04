@@ -26,8 +26,14 @@ public class Member {
     //             1 = 회원 탈퇴(비활성화)
     private int mstatus;
 
+    private String fcmtoken;
+
     public void changeMpw(String mpw) {
         this.mpw = mpw;
+    }
+
+    public void updateFcmToken(String fcmtoken) {
+        this.fcmtoken = fcmtoken;
     }
 
     public void delAccount() {

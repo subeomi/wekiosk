@@ -27,7 +27,8 @@ public class MemberController {
 
         MemberDTO result = memberService.login(
                 memberDTO.getMemail(),
-                memberDTO.getMpw()
+                memberDTO.getMpw(),
+                memberDTO.getFcmtoken()
         );
 
         fcmNotificationService.sendLoginInfo(memberDTO.getMemail());

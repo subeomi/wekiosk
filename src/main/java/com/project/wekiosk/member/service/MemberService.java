@@ -16,7 +16,7 @@ public interface MemberService {
 
     void delete(String memail);
 
-    MemberDTO login(String memail, String mpw);
+    MemberDTO login(String memail, String mpw, String fcmtoken);
 
     int duplicateCheck(String memail);
 

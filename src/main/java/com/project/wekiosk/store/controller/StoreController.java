@@ -49,6 +49,8 @@ public class StoreController {
     @PutMapping("modify")
     public Map<String, String> modify(@RequestBody StoreDTO storeDTO){
 
+        log.info(storeDTO);
+
         storeService.modifier(storeDTO);
 
         return Map.of("result", "변경완료");

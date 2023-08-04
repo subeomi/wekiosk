@@ -36,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO login(String memail, String mpw) {
+    public MemberDTO login(String memail, String mpw, String fcmtoken) {
 
         MemberDTO memberDTO = null;
 
@@ -50,6 +50,9 @@ public class MemberServiceImpl implements MemberService {
             } else if(member.getMstatus() == 1){
                 throw new MemberLoginException("Account Deleted");
             }
+
+            member.updateFcmToken(fcmtoken);
+            memberRepository.save(member);
 
             memberDTO = MemberDTO.builder()
                     .memail(member.getMemail())
