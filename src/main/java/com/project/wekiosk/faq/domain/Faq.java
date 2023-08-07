@@ -1,5 +1,6 @@
-package com.project.wekiosk.domain;
+package com.project.wekiosk.faq.domain;
 
+import com.project.wekiosk.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,13 @@ public class Faq {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public void changeQtitle(String qtitle) {
+        this.qtitle = qtitle;
+    }
+
+    public void changeQcontent(String qcontent) {
+        this.qcontent = qcontent;
+    }
 
 }

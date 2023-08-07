@@ -1,6 +1,6 @@
 package com.project.wekiosk.member;
 
-import com.project.wekiosk.domain.Member;
+import com.project.wekiosk.member.domain.Member;
 import com.project.wekiosk.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

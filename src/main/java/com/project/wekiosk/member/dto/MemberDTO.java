@@ -17,4 +17,8 @@ public class MemberDTO {
     private String mname;
 
     private int mgrade;
+
+    private int mstatus;
+
+    private String fcmtoken;
 }
