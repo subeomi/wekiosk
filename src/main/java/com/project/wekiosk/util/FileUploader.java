@@ -30,7 +30,7 @@ public class FileUploader {
 
     }
 
-    @Value("${org.zerock.upload.path}")
+    @Value("${com.project.upload.path}")
     private String path;
 
     public void removeFiles(List<String> fileNames) {

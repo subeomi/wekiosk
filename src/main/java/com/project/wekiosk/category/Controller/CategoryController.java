@@ -20,7 +20,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<Void> registerCategory(@RequestBody CategoryDTO categoryDTO) {
         categoryService.registerCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -36,8 +36,12 @@ public class CategoryController {
         CategoryDTO category = categoryService.getCategoryById(cateno);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
-
-    @DeleteMapping("/{cateno}")
+    @PutMapping("/{cateno}/modify")
+    public ResponseEntity<Void> updateCategory(@PathVariable Long cateno, @RequestBody CategoryDTO categoryDTO) {
+        categoryService.updateCategory(cateno, categoryDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @DeleteMapping("/{cateno}/delete")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long cateno) {
         categoryService.deleteCategory(cateno);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -11,7 +11,7 @@ public interface CategoryService {
 
     void registerCategory(CategoryDTO categoryDTO);
 
-    void updateCategory(CategoryDTO categoryDTO);
+    void updateCategory(Long cateno, CategoryDTO categoryDTO);
 
     void deleteCategory(Long cateno);
 }

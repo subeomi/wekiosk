@@ -38,6 +38,7 @@ public class Product1 {
 
     @OneToMany(mappedBy = "product1", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @JsonIgnore
     private List<Options> options = new ArrayList<>();
 
 
