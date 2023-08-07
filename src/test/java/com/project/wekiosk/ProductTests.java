@@ -21,7 +21,7 @@ public class ProductTests {
 
      @Test
      public void testInsert() {
-         Category category = new Category(1L);
+         Category category = new Category(23L);
 
          for (int i = 0; i < 10; i++) {
              Product1 product = Product1.builder()

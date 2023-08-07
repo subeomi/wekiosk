@@ -15,7 +15,7 @@ public class CategoryTests {
     public void insertCategory() {
         Category category = Category.builder()
                 .catename("TestCategory")
-                .sno(2L)
+                .sno(1L)
                 .build();
 
         categoryRepository.save(category);
