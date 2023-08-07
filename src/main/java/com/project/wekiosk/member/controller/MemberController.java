@@ -3,6 +3,7 @@ package com.project.wekiosk.member.controller;
 import com.project.wekiosk.fcm.service.FcmNotificationService;
 import com.project.wekiosk.member.dto.MemberDTO;
 import com.project.wekiosk.member.service.MemberService;
+import com.project.wekiosk.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FcmNotificationService fcmNotificationService;
+    private final CustomUserDetailsService customUserDetailsService;
 
 
     @PostMapping("login")
@@ -35,6 +37,8 @@ public class MemberController {
 
         log.info("Return: " + result);
 
+//        customUserDetailsService.loadUserByUsername(memberDTO.getMemail());
+
         return result;
     }
 
@@ -48,7 +52,7 @@ public class MemberController {
         return Map.of("result", memail);
     }
 
-    @GetMapping("{memail}")
+    @GetMapping("getone/{memail}")
     public MemberDTO getOne(@PathVariable("memail") String memail){
 
         return memberService.getOne(memail);
@@ -62,7 +66,7 @@ public class MemberController {
         return Map.of("result", "변경완료");
     }
 
-    @DeleteMapping("{memail}")
+    @DeleteMapping("delete/{memail}")
     public Map<String, String> delete(@PathVariable("memail") String memail){
 
         memberService.delete(memail);

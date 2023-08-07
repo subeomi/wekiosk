@@ -1,6 +1,7 @@
 package com.project.wekiosk.member.service;
 
 import com.project.wekiosk.member.domain.Member;
+import com.project.wekiosk.member.domain.MemberRole;
 import com.project.wekiosk.member.dto.MemberDTO;
 import com.project.wekiosk.member.repository.MemberRepository;
 
@@ -12,11 +13,11 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -26,11 +27,12 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
     private final JavaMailSender emailSender;
+    private final PasswordEncoder passwordEncoder;
 
     // 런타임익셉션 -> 언체크드익셉션
     public static final class MemberLoginException extends RuntimeException {
 
-        public MemberLoginException(String msg){
+        public MemberLoginException(String msg) {
             super(msg);
         }
     }
@@ -40,28 +42,21 @@ public class MemberServiceImpl implements MemberService {
 
         MemberDTO memberDTO = null;
 
-        try{
+        try {
             Optional<Member> result = memberRepository.findById(memail);
 
             Member member = result.orElseThrow();
 
-            if( !member.getMpw().equals(mpw)){
-                throw new MemberLoginException("Password Incorrect");
-            } else if(member.getMstatus() == 1){
+            if (member.getMstatus() == 1) {
                 throw new MemberLoginException("Account Deleted");
             }
 
             member.updateFcmToken(fcmtoken);
             memberRepository.save(member);
 
-            memberDTO = MemberDTO.builder()
-                    .memail(member.getMemail())
-                    .mpw("") // 받을 땐 받고, 뱉을 땐 빈 문자열로.
-                    .mname(member.getMname())
-                    .mgrade(member.getMgrade())
-                    .build();
+            memberDTO = new MemberDTO(member.getMemail(), "", member.getMname(), false, null, 0, "");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new MemberLoginException(e.getMessage());
 
         }
@@ -80,7 +75,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String register(MemberDTO memberDTO) {
 
+        memberDTO.setMpw(passwordEncoder.encode(memberDTO.getMpw()));
+
         Member member = modelMapper.map(memberDTO, Member.class);
+
+        member.addRole(MemberRole.USER);
 
         memberRepository.save(member);
 
@@ -126,31 +125,31 @@ public class MemberServiceImpl implements MemberService {
 
     private String ePw = createKey();
 
-    private MimeMessage createMessage(String memail, String ePw)throws Exception{
+    private MimeMessage createMessage(String memail, String ePw) throws Exception {
 
-        log.info("보내는 대상 : "+ memail);
-        log.info("인증 번호 : "+ePw);
-        MimeMessage  message = emailSender.createMimeMessage();
+        log.info("보내는 대상 : " + memail);
+        log.info("인증 번호 : " + ePw);
+        MimeMessage message = emailSender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, memail);//보내는 대상
         message.setSubject("WE'KIOSK 인증번호입니다.");//제목
 
-        String msgg="";
-        msgg+= "<div style='margin:20px;'>";
-        msgg+= "<img src='http://localhost:3000/img/logo.png' />";
-        msgg+= "<br>";
-        msgg+= "<br>";
-        msgg+= "<p>회원가입 인증번호입니다.<p>";
-        msgg+= "<br>";
-        msgg+= "<p>감사합니다.<p>";
-        msgg+= "<br>";
-        msgg+= "<div>";
-        msgg+= "<h3 style='color:blue;'>인증번호: </h3>";
-        msgg+= "<strong>";
-        msgg+= ePw+"</strong><div><br/> ";
-        msgg+= "</div>";
+        String msgg = "";
+        msgg += "<div style='margin:20px;'>";
+        msgg += "<img src='http://localhost:3000/img/logo.png' />";
+        msgg += "<br>";
+        msgg += "<br>";
+        msgg += "<p>회원가입 인증번호입니다.<p>";
+        msgg += "<br>";
+        msgg += "<p>감사합니다.<p>";
+        msgg += "<br>";
+        msgg += "<div>";
+        msgg += "<h3 style='color:blue;'>인증번호: </h3>";
+        msgg += "<strong>";
+        msgg += ePw + "</strong><div><br/> ";
+        msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("wekiosk@kiosk.com","WEKIOSK"));//보내는 사람
+        message.setFrom(new InternetAddress("wekiosk@kiosk.com", "WEKIOSK"));//보내는 사람
 
         return message;
     }
@@ -174,11 +173,11 @@ public class MemberServiceImpl implements MemberService {
         // TODO Auto-generated method stub
         MimeMessage message = createMessage(memail, ePw);
 
-        try{//예외처리
+        try {//예외처리
 
             emailSender.send(message);
             return Map.of("email", memail, "code", ePw);
-        }catch(MailException es){
+        } catch (MailException es) {
             es.printStackTrace();
             throw new IllegalArgumentException();
         }
