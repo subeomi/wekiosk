@@ -1,6 +1,6 @@
 package com.project.wekiosk.category.domain;
 
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Product1> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     public void setCatename(String catename){
         this.catename = catename;

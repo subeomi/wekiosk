@@ -19,9 +19,9 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pno") // 외래키 지정
-    private Product1 product;
+    private Product product;
 
-    public ProductImage(Product1 product, String fname) {
+    public ProductImage(Product product, String fname) {
         this.product = product;
         this.fname = fname;
     }

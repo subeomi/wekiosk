@@ -3,7 +3,7 @@ package com.project.wekiosk.category.service;
 import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.category.dto.CategoryDTO;
 import com.project.wekiosk.category.repository.CategoryRepository;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.repository.ProductRepository;
 import com.project.wekiosk.util.FileUploader;
@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. cateno: " + cateno));
 
         // 카테고리에 속하는 상품들 조회
-        List<Product1> products = productRepository.findByCategory(category);
+        List<Product> products = productRepository.findByCategory(category);
 
         // 상품들의 파일 삭제
         products.forEach(product -> {
