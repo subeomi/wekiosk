@@ -14,6 +14,6 @@ public interface OptionsRepository extends JpaRepository<Options, Long> {
     Optional<Options> findById(Long ord);
 
 
-    @Query("SELECT MAX(o.ord) FROM Options o WHERE o.product1.pno = ?1")
+    @Query("SELECT MAX(o.ord) FROM Options o WHERE o.product.pno = ?1")
     Optional<Long> findMaxOrdByPno(Long pno);
 }

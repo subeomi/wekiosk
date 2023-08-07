@@ -2,7 +2,7 @@ package com.project.wekiosk.product.service;
 
 import com.project.wekiosk.page.dto.PageRequestDTO;
 import com.project.wekiosk.page.dto.PageResponseDTO;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
 import com.project.wekiosk.product.dto.ProductListDTO;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    Optional<Product1> findProductInCategory(Long cateno, Long pno);
+    Optional<Product> findProductInCategory(Long cateno, Long pno);
 
     PageResponseDTO<ProductListDTO> list(PageRequestDTO requestDTO);
 
@@ -22,7 +22,7 @@ public interface ProductService {
 
     void modifyProduct(Long pno, ProductDTO productDTO);
 
-    List<Product1> getProductsByCategory(Long cateno);
+    List<Product> getProductsByCategory(Long cateno);
 
     ProductDTO readOneInCategory(Long cateno, Long pno);
 

@@ -1,9 +1,9 @@
 package com.project.wekiosk.repositoryTests;
 
-import com.project.wekiosk.domain.Store;
 import com.project.wekiosk.order.domain.Orders;
 import com.project.wekiosk.order.repository.OrdersRepository;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
+import com.project.wekiosk.store.domain.Store;
 import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -31,10 +31,10 @@ public class OrdersTests {
                     .sno(1L)
                     .build();
 
-            Product1 product1 = Product1.builder()
+            Product product = Product.builder()
                     .pno(2L)
                     .build();
-            Product1 product2 = Product1.builder()
+            Product product2 = Product.builder()
                     .pno(3L)
                     .build();
 
@@ -43,7 +43,7 @@ public class OrdersTests {
                     .store(store)
                     .build();
 
-            orders.addOrderDetail(5+i, product1);
+            orders.addOrderDetail(5+i, product);
             orders.addOrderDetail(7+i, product2);
 
             repository.save(orders);

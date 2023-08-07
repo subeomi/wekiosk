@@ -10,7 +10,7 @@ import com.project.wekiosk.payment.domain.QPayment;
 import com.project.wekiosk.payment.dto.PageRequestDTO;
 import com.project.wekiosk.payment.dto.PageResponseDTO;
 import com.project.wekiosk.payment.dto.PaymentListDTO;
-import com.project.wekiosk.product.domain.QProduct1;
+import com.project.wekiosk.product.domain.QProduct;
 import com.project.wekiosk.product.domain.QProductImage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
@@ -33,7 +33,7 @@ public class PaymentSearchImpl extends QuerydslRepositorySupport implements Paym
         QPayment payment = QPayment.payment;
         QOrders orders = QOrders.orders;
         QOrderDetail detail = QOrderDetail.orderDetail;
-        QProduct1 product = QProduct1.product1;
+        QProduct product = QProduct.product;
 
         JPQLQuery<Payment> query = from(payment);
         query.leftJoin(payment.orders, orders);

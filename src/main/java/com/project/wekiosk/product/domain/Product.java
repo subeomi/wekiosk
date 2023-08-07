@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Entity
-public class Product1 {
+public class Product {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -36,7 +36,7 @@ public class Product1 {
     @JsonIgnore
     private List<ProductImage> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product1", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Options> options = new ArrayList<>();
 
