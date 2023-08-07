@@ -7,6 +7,7 @@ import com.project.wekiosk.product.domain.Product1;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.repository.ProductRepository;
 import com.project.wekiosk.util.FileUploader;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,9 +53,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(CategoryDTO categoryDTO) {
-        Category category = mapToEntity(categoryDTO);
-        categoryRepository.save(category);
+    public void updateCategory(Long cateno, CategoryDTO categoryDTO) {
+        // cateno로 기존 카테고리를 찾습니다.
+        Category categoryToUpdate = categoryRepository.findById(cateno)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with cateno: " + cateno));
+
+        // categoryDTO의 정보로 카테고리를 업데이트합니다.
+        categoryToUpdate.setCatename(categoryDTO.getCatename());
+
+        // 업데이트된 카테고리를 저장합니다.
+        categoryRepository.save(categoryToUpdate);
     }
 
     @Override

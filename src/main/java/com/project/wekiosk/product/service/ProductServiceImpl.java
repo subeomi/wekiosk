@@ -89,10 +89,12 @@ public class ProductServiceImpl implements ProductService {
 
 
     public List<Product1> getProductsByCategory(Long cateno) {
+
         return productRepository.findAllByCategory(cateno);
     }
 
     private ProductDTO toDTO(Product1 product) {
+
         return modelMapper.map(product, ProductDTO.class);
     }
 

@@ -1,5 +1,6 @@
 package com.project.wekiosk.product.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.product.domain.Product1;
 import com.project.wekiosk.product.dto.ProductDTO;
@@ -10,11 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -28,29 +27,43 @@ public class ProductController {
     private final FileUploader uploader;
 
 
-    @PostMapping("{cateno}/products")
-    public ResponseEntity<Long> register(@PathVariable Long cateno, @ModelAttribute ProductDTO productDTO) {
+    @PostMapping(value = "{cateno}/products", consumes = "multipart/form-data")
+    public ResponseEntity<ProductDTO> register(
+            @PathVariable Long cateno,
+            @ModelAttribute ProductDTO productDTO, List<MultipartFile> images) {
         try {
             productDTO.setCateno(cateno);
 
-            // 기존 productDTO에 options 정보를 설정
             List<OptionsDTO> optionsList = productDTO.getOptions();
-            productDTO.setOptions(optionsList);
 
-            for (OptionsDTO optionsDTO : optionsList) {
-                optionsDTO.setPno(productDTO.getPno());
+            if (optionsList != null) {
+                for (OptionsDTO optionsDTO : optionsList) {
+                    optionsDTO.setPno(productDTO.getPno());
+                }
+            }
+
+            // 사진 업로드 로직 추가
+            List<String> uploadedImageFileNames = new ArrayList<>();
+
+            if (images != null && !images.isEmpty()) {
+                // 파일 업로더 메서드를 호출하여 이미지를 업로드하고 파일 이름들을 가져옴
+                uploadedImageFileNames = uploader.uploadFiles(images, true);
             }
 
             Long registeredProduct = productService.register(productDTO);
             log.info(productDTO);
-            // 결과 반환
-            return ResponseEntity.ok(registeredProduct);
+
+            // 등록된 상품 정보를 다시 응답
+            return ResponseEntity.ok(productDTO);
         } catch (Exception e) {
             // 오류 처리
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+
 
 
     @DeleteMapping("products/{pno}/delete")
