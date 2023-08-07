@@ -17,5 +17,7 @@ public class StoreDTO {
 
     private String scontact;
 
+    private int sstatus;
+
     private String memail;
 }
