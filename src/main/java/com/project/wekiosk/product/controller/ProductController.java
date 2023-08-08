@@ -2,7 +2,7 @@ package com.project.wekiosk.product.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.wekiosk.option.dto.OptionsDTO;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
 import com.project.wekiosk.product.service.ProductService;
 import com.project.wekiosk.util.FileUploader;
@@ -73,8 +73,8 @@ public class ProductController {
     }
 
     @GetMapping("{cateno}/products")
-    public ResponseEntity<List<Product1>> getProductsByCategory(@PathVariable Long cateno) {
-        List<Product1> products = productService.getProductsByCategory(cateno);
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long cateno) {
+        List<Product> products = productService.getProductsByCategory(cateno);
         log.info(products);
         return ResponseEntity.ok(products);
     }

@@ -1,7 +1,6 @@
 package com.project.wekiosk.option.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +23,7 @@ public class Options {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pno", referencedColumnName = "pno")
-    @JsonIgnore
-    private Product1 product1;
+    private Product product;
 
     public void setPno(Long pno) {
     }

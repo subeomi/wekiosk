@@ -3,7 +3,7 @@ package com.project.wekiosk.option.service;
 import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.option.repository.OptionsRepository;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +44,14 @@ public void addOptions(String oname, Long oprice, Long pno) {
     long maxOrd = optionsRepository.findMaxOrdByPno(pno).orElse(0L);
     long newOrd = maxOrd + 1;
 
-    // pno를 사용하여 Product1 엔티티를 가져옴
-    Product1 product1 = productRepository.findById(pno)
+    // pno를 사용하여 product 엔티티를 가져옴
+    Product product = productRepository.findById(pno)
             .orElseThrow(() -> new IllegalArgumentException("Invalid pno: " + pno));
 
     Options options = Options.builder()
             .oname(oname)
             .oprice(oprice)
-            .product1(product1) // Product1 엔티티를 설정하여 연관 관계를 맺음
+            .product(product) // product 엔티티를 설정하여 연관 관계를 맺음
             .ord(newOrd)
             .build();
     optionsRepository.save(options);
@@ -86,7 +86,7 @@ public void addOptions(String oname, Long oprice, Long pno) {
                 .ord(options.getOrd())
                 .oname(options.getOname())
                 .oprice(options.getOprice())
-                .pno(options.getProduct1().getPno())
+                .pno(options.getProduct().getPno())
                 .build();
     }
 

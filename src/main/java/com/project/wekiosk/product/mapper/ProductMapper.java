@@ -1,6 +1,6 @@
 package com.project.wekiosk.product.mapper;
 
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -13,5 +13,5 @@ public interface ProductMapper {
     @Mapping(source = "name", target = "pname")
     @Mapping(source = "price", target = "pprice")
     @Mapping(source = "category.cateno", target = "cateno")
-    ProductDTO toDTO(Product1 product);
+    ProductDTO toDTO(Product product);
 }

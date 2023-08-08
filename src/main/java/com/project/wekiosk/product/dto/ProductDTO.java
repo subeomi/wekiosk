@@ -3,7 +3,7 @@ package com.project.wekiosk.product.dto;
 import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.option.dto.OptionsDTO;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,14 +25,15 @@ public class ProductDTO {
     private Long cateno;
     private List<OptionsDTO> options; // 옵션 리스트
     private List<MultipartFile> images;
+    private List<String> gimages;
     private Long pno;// 상품 이미지 파일 리스트
 
     private int quantity;
 
 
-    // Product1DTO를 Product1 엔티티로 변환하는 메서드
-    public Product1 toEntity(Category category) {
-        Product1 product = new Product1();
+    // productDTO를 product 엔티티로 변환하는 메서드
+    public Product toEntity(Category category) {
+        Product product = new Product();
         product.setPname(this.pname);
         product.setPprice(this.pprice);
 

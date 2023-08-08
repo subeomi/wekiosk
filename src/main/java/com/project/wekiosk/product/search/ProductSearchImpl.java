@@ -2,8 +2,8 @@ package com.project.wekiosk.product.search;
 
 import com.project.wekiosk.page.dto.PageRequestDTO;
 import com.project.wekiosk.page.dto.PageResponseDTO;
-import com.project.wekiosk.product.domain.Product1;
-import com.project.wekiosk.product.domain.QProduct1;
+import com.project.wekiosk.product.domain.Product;
+import com.project.wekiosk.product.domain.QProduct;
 import com.project.wekiosk.product.dto.ProductListDTO;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
@@ -19,14 +19,14 @@ import java.util.List;
 public class ProductSearchImpl extends QuerydslRepositorySupport implements ProductSearch {
 
     public ProductSearchImpl() {
-        super(Product1.class);
+        super(Product.class);
     }
 
     @Override
     public PageResponseDTO<ProductListDTO> list(PageRequestDTO pageRequestDTO) {
-        QProduct1 product = QProduct1.product1;
+        QProduct product = QProduct.product;
 
-        JPQLQuery<Product1> query = from(QProduct1.product1); // 수정된 부분
+        JPQLQuery<Product> query = from(QProduct.product); // 수정된 부분
 
         int pageNum = pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1;
         Pageable pageable = PageRequest.of(pageNum, pageRequestDTO.getSize(), Sort.by("pno").descending());

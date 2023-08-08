@@ -1,6 +1,6 @@
 package com.project.wekiosk.order.domain;
 
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +15,6 @@ public class OrderDetail {
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Product1 product;
+    private Product product;
 
 }

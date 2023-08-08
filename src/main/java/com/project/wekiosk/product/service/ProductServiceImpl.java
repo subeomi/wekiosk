@@ -7,7 +7,7 @@ import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.option.repository.OptionsRepository;
 import com.project.wekiosk.page.dto.PageRequestDTO;
 import com.project.wekiosk.page.dto.PageResponseDTO;
-import com.project.wekiosk.product.domain.Product1;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.dto.ProductDTO;
 import com.project.wekiosk.product.dto.ProductListDTO;
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private final OptionsRepository optionsRepository;
 
     @Override
-    public Optional<Product1> findProductInCategory(Long cateno, Long pno) {
+    public Optional<Product> findProductInCategory(Long cateno, Long pno) {
         return productRepository.findProductInCategory(cateno, pno);
     }
     @Override
@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. cateno=" + productDTO.getCateno()));
 
         Long savedPno = setProduct(productDTO); // setProduct() 메서드를 호출하여 상품과 옵션들을 데이터베이스에 저장하고, 생성한 상품의 pno 값을 얻습니다.
-        Product1 savedProduct = productRepository.findById(savedPno)
+        Product savedProduct = productRepository.findById(savedPno)
                 .orElseThrow(() -> new NoSuchElementException("생성한 상품을 찾을 수 없습니다. pno=" + savedPno));
 
         // 상품과 카테고리 연관 관계 설정
@@ -72,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void remove(Long pno) {
-        Product1 product = productRepository.findById(pno)
+        Product product = productRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다. pno: " + pno));
 
         List<ProductImage> images = product.getImages();
@@ -88,27 +88,51 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public List<Product1> getProductsByCategory(Long cateno) {
-
+    public List<Product> getProductsByCategory(Long cateno) {
         return productRepository.findAllByCategory(cateno);
     }
 
-    private ProductDTO toDTO(Product1 product) {
-
+    private ProductDTO toDTO(Product product) {
         return modelMapper.map(product, ProductDTO.class);
     }
 
     @Override
     public ProductDTO readOneInCategory(Long cateno, Long pno) {
-        return productRepository.findProductInCategory(cateno, pno)
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .orElse(null);
+
+        Optional<Product> result = productRepository.findProductInCategory(cateno, pno);
+
+        log.info("r >>>>>>> "+ result);
+
+        Product product = result.orElseThrow();
+
+        log.info("p >>>>>>> "+ product.getImages());
+
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+
+//        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+        ProductDTO dto = ProductDTO.builder()
+                .pname(product.getPname())
+                .pprice(product.getPprice())
+                .cateno(product.getCategory().getCateno())
+                .options(product.getOptions().stream().map(options -> OptionsDTO.builder()
+                        .pno(options.getProduct().getPno())
+                        .oname(options.getOname())
+                        .oprice(options.getOprice())
+                        .ord(options.getOrd())
+                        .build()).collect(Collectors.toList()))
+                .gimages(product.getImages().stream().map(image-> image.getFname()).collect(Collectors.toList()))
+                .pno(product.getPno())
+                .build();
+
+        log.info("d >>>>>>> " + dto);
+
+        return dto;
     }
 
     @Override
     public Long setProduct(ProductDTO productDTO) {
         // 상품 엔티티 생성
-        Product1 product = Product1.builder()
+        Product product = Product.builder()
                 .pname(productDTO.getPname())
                 .pprice(productDTO.getPprice())
                 .build();
@@ -120,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
                 Options option = Options.builder()
                         .oname(optionsDTO.getOname())
                         .oprice(optionsDTO.getOprice())
-                        .product1(product)
+                        .product(product)
                         .build();
                 // 옵션 엔티티를 저장합니다.
                 optionsRepository.save(option);
@@ -129,21 +153,15 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-        Product1 savedProduct = productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
 
         return savedProduct.getPno(); // 생성한 상품의 pno를 반환합니다.
     }
 
-//    @Override
-//    public ProductDTO getProductDTOById(Long pno) {
-//        Product1 product = productRepository.findById(pno)
-//                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다."));
-//        return toDTO(product);
-//    }
 
     @Override
     public void modifyProduct(Long pno, ProductDTO productDTO) {
-        Product1 existingProduct = productRepository.findById(pno)
+        Product existingProduct = productRepository.findById(pno)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다. pno: " + pno));
 
         // 상품 정보 업데이트
@@ -177,14 +195,14 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(existingProduct);
     }
 
-    private List<Options> convertToOptionEntities(List<OptionsDTO> optionsDTOList, Product1 existingProduct) {
+    private List<Options> convertToOptionEntities(List<OptionsDTO> optionsDTOList, Product existingProduct) {
         List<Options> options = new ArrayList<>();
         if (optionsDTOList != null && !optionsDTOList.isEmpty()) {
             for (OptionsDTO optionsDTO : optionsDTOList) {
                 Options option = Options.builder()
                         .oname(optionsDTO.getOname())
                         .oprice(optionsDTO.getOprice())
-                        .product1(existingProduct) // 기존 Product1 엔티티와 연관 관계 설정
+                        .product(existingProduct) // 기존 Product 엔티티와 연관 관계 설정
                         .build();
                 options.add(option);
             }
