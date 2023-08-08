@@ -22,7 +22,7 @@ public class Options {
     private Long oprice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pno", referencedColumnName = "pno")
+//    @JoinColumn(name = "pno", referencedColumnName = "pno")
     private Product product;
 
     public void setPno(Long pno) {

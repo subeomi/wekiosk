@@ -90,6 +90,12 @@ public class JWTCheckFilter extends OncePerRequestFilter  {
             Gson gson = new Gson();
             String msg = gson.toJson(Map.of("error", "ERROR_ACCESS_TOKEN"));
 
+            if(e.getMessage().equals("Expired")){
+                PrintWriter printWriter = response.getWriter();
+                printWriter.println(gson.toJson(Map.of("error", "Expired")));
+                printWriter.close();
+            }
+
             response.setContentType("application/json");
             PrintWriter printWriter = response.getWriter();
             printWriter.println(msg);
