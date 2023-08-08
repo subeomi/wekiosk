@@ -1,6 +1,6 @@
 package com.project.wekiosk.product.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
@@ -28,9 +28,10 @@ public class ProductController {
 
 
     @PostMapping(value = "{cateno}/products", consumes = "multipart/form-data")
-    public ResponseEntity<ProductDTO> register(
+    public ResponseEntity<Long> register(
             @PathVariable Long cateno,
-            @ModelAttribute ProductDTO productDTO, List<MultipartFile> images) {
+            @ModelAttribute ProductDTO productDTO,
+            @RequestParam("images") List<MultipartFile> images) {
         try {
             productDTO.setCateno(cateno);
 
@@ -50,18 +51,18 @@ public class ProductController {
                 uploadedImageFileNames = uploader.uploadFiles(images, true);
             }
 
+            productDTO.setGimages(uploadedImageFileNames);
             Long registeredProduct = productService.register(productDTO);
             log.info(productDTO);
 
-            // 등록된 상품 정보를 다시 응답
-            return ResponseEntity.ok(productDTO);
+            // 결과 반환
+            return ResponseEntity.ok(registeredProduct);
         } catch (Exception e) {
             // 오류 처리
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
 
 
@@ -73,8 +74,8 @@ public class ProductController {
     }
 
     @GetMapping("{cateno}/products")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long cateno) {
-        List<Product> products = productService.getProductsByCategory(cateno);
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable Long cateno) {
+        List<ProductDTO> products = productService.getProductsByCategory(cateno);
         log.info(products);
         return ResponseEntity.ok(products);
     }
@@ -82,10 +83,6 @@ public class ProductController {
 
     @GetMapping("{cateno}/products/{pno}")
     public ResponseEntity<ProductDTO> getOne(@PathVariable("cateno") Long cateno, @PathVariable("pno") Long pno) {
-        log.info("-------------------------------------");
-        log.info("Cateno-" + cateno);
-        log.info("PNO-" + pno);
-        log.info("-------------------------------------");
         ProductDTO productDTO = productService.readOneInCategory(cateno, pno);
 
         return ResponseEntity.ok(productDTO);

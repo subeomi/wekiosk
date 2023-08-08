@@ -43,6 +43,7 @@ public class Product {
 
 
     public void addImage(String name) {
+
         ProductImage pImage = ProductImage.builder().fname(name)
                 .ord(images.size()).build();
         images.add(pImage);

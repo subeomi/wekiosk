@@ -22,7 +22,7 @@ public interface ProductService {
 
     void modifyProduct(Long pno, ProductDTO productDTO);
 
-    List<Product> getProductsByCategory(Long cateno);
+    List<ProductDTO> getProductsByCategory(Long cateno);
 
     ProductDTO readOneInCategory(Long cateno, Long pno);
 

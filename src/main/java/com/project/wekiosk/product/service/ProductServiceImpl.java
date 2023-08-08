@@ -60,11 +60,12 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.findById(savedPno)
                 .orElseThrow(() -> new NoSuchElementException("생성한 상품을 찾을 수 없습니다. pno=" + savedPno));
 
+        productDTO.getGimages().forEach(fname -> {
+                    savedProduct.addImage(fname);
+                });
         // 상품과 카테고리 연관 관계 설정
         savedProduct.setCategory(category);
 
-        // 실제로는 상품 정보와 옵션들을 데이터베이스에 저장하는 로직을 구현해야 합니다.
-        // 이후에 productRepository.save(savedProduct)와 같은 로직을 사용하여 실제 데이터베이스에 저장합니다.
 
         return savedProduct.getPno(); // 생성한 상품의 pno를 반환합니다.
     }
@@ -88,8 +89,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public List<Product> getProductsByCategory(Long cateno) {
-        return productRepository.findAllByCategory(cateno);
+    public List<ProductDTO> getProductsByCategory(Long cateno) {
+         List<Product> result = productRepository.findAllByCategory(cateno);
+
+         List<ProductDTO> dtoList = result.stream()
+                .map(product -> ProductDTO.builder()
+                        .pprice(product.getPprice())
+                        .pname(product.getPname())
+                        .gimages(product.getImages().stream().map(img -> img.getFname()).collect(Collectors.toList()))
+                        .options(product.getOptions().stream().map(option-> OptionsDTO.builder()
+                                .ord(option.getOrd())
+                                .oname(option.getOname())
+                                .oprice(option.getOprice())
+                                .build()).collect(Collectors.toList()))
+                        .pno(product.getPno())
+                        .build())
+                .collect(Collectors.toList());
+
+         return dtoList;
     }
 
     private ProductDTO toDTO(Product product) {
@@ -101,11 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Product> result = productRepository.findProductInCategory(cateno, pno);
 
-        log.info("r >>>>>>> "+ result);
-
         Product product = result.orElseThrow();
-
-        log.info("p >>>>>>> "+ product.getImages());
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
 
@@ -146,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
                         .oprice(optionsDTO.getOprice())
                         .product(product)
                         .build();
-                // 옵션 엔티티를 저장합니다.
+
                 optionsRepository.save(option);
             }
         }
