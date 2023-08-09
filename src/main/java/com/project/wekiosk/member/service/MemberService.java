@@ -1,6 +1,7 @@
 package com.project.wekiosk.member.service;
 
 import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.dto.MemberProfileDTO;
 import jakarta.transaction.Transactional;
 
 import java.util.Map;
@@ -17,6 +18,10 @@ public interface MemberService {
     void delete(String memail);
 
     MemberDTO login(String memail, String mpw, String fcmtoken);
+
+    void updateFcmtoken(MemberProfileDTO dto);
+
+    String fcmTokenCheck(String memail);
 
     int duplicateCheck(String memail);
 

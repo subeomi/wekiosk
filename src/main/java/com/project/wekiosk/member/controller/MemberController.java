@@ -2,6 +2,7 @@ package com.project.wekiosk.member.controller;
 
 import com.project.wekiosk.fcm.service.FcmNotificationService;
 import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.dto.MemberProfileDTO;
 import com.project.wekiosk.member.service.MemberService;
 import com.project.wekiosk.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,8 @@ public class MemberController {
         return result;
     }
 
+
+
     @PostMapping("regist")
     public Map<String, String> regist(@RequestBody MemberDTO memberDTO){
 
@@ -66,12 +69,28 @@ public class MemberController {
         return Map.of("result", "변경완료");
     }
 
+    @PutMapping("fcmtoken")
+    public Map<String, String> updateFcmtoken(@RequestBody MemberProfileDTO dto){
+
+        log.info(dto);
+
+        memberService.updateFcmtoken(dto);
+
+        return Map.of("result", "갱신완료");
+    }
+
     @DeleteMapping("delete/{memail}")
     public Map<String, String> delete(@PathVariable("memail") String memail){
 
         memberService.delete(memail);
         
         return Map.of("result", "삭제완료");
+    }
+
+    @GetMapping("fcmtoken/{memail}")
+    public String fcmtokenCheck(@PathVariable("memail")String memail){
+
+        return memberService.fcmTokenCheck(memail);
     }
 
     @GetMapping("duplicate/{memail}")

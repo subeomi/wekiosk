@@ -3,6 +3,7 @@ package com.project.wekiosk.member.service;
 import com.project.wekiosk.member.domain.Member;
 import com.project.wekiosk.member.domain.MemberRole;
 import com.project.wekiosk.member.dto.MemberDTO;
+import com.project.wekiosk.member.dto.MemberProfileDTO;
 import com.project.wekiosk.member.repository.MemberRepository;
 
 import jakarta.mail.Message.RecipientType;
@@ -62,6 +63,24 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return memberDTO;
+    }
+
+    @Override
+    public void updateFcmtoken(MemberProfileDTO dto) {
+
+        Member member = memberRepository.findById(dto.getMemail()).orElseThrow();
+
+        member.updateFcmToken(dto.getFcmtoken());
+
+        memberRepository.save(member);
+    }
+
+    @Override
+    public String fcmTokenCheck(String memail) {
+
+        Member member = memberRepository.findById(memail).orElseThrow();
+
+        return member.getFcmtoken();
     }
 
     @Override
