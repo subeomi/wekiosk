@@ -7,6 +7,8 @@ import java.util.List;
 public interface CategoryService {
     List<CategoryDTO> getAllCategories();
 
+    List<CategoryDTO> getListBySno(Long sno);
+
     CategoryDTO getCategoryById(Long cateno);
 
     void registerCategory(CategoryDTO categoryDTO);

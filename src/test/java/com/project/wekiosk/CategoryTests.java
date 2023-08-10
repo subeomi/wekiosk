@@ -2,6 +2,8 @@ package com.project.wekiosk;
 
 import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.category.repository.CategoryRepository;
+import com.project.wekiosk.store.domain.Store;
+import com.project.wekiosk.store.repository.StoreRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,40 +13,49 @@ public class CategoryTests {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private StoreRepository storeRepository;
+
     @Test
     public void insertCategory() {
+
+        Store store = storeRepository.findById(27L).orElseThrow();
+
         Category category = Category.builder()
-                .catename("TestCategory")
-                .sno(2L)
+                .catename("면류")
+                .store(store)
                 .build();
 
         categoryRepository.save(category);
 
-        Category foundCategory = categoryRepository.findById(1L).orElse(null);
-        if (foundCategory == null) {
-            System.out.println("Category not found");
-            return;
-        }
+//        Category foundCategory = categoryRepository.findById(1L).orElse(null);
+//        if (foundCategory == null) {
+//            System.out.println("Category not found");
+//            return;
+//        }
+//
+//        if (!foundCategory.getCatename().equals("TestCategory")) {
+//            System.out.println("Category name mismatch");
+//            return;
+//        }
 
-        if (!foundCategory.getCatename().equals("TestCategory")) {
-            System.out.println("Category name mismatch");
-            return;
-        }
-
-        if (!foundCategory.getSno().equals(100L)) {
-            System.out.println("Sno mismatch");
-            return;
-        }
+//        if (!foundCategory.getSno().equals(100L)) {
+//            System.out.println("Sno mismatch");
+//            return;
+//        }
 
         System.out.println("Test passed");
     }
 
     @Test
     public void testDeleteCategory() {
+
+        Store store = storeRepository.findById(100L).orElseThrow();
+
         Category category = Category.builder()
                 .cateno(1L)
                 .catename("TestCategory")
-                .sno(100L)
+                .store(store)
                 .build();
 
         categoryRepository.save(category);

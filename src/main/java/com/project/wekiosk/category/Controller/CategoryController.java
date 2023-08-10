@@ -31,11 +31,18 @@ public class CategoryController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @GetMapping("/{cateno}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long cateno){
-        CategoryDTO category = categoryService.getCategoryById(cateno);
-        return new ResponseEntity<>(category, HttpStatus.OK);
+//    @GetMapping("/{cateno}")
+//    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long cateno){
+//        CategoryDTO category = categoryService.getCategoryById(cateno);
+//        return new ResponseEntity<>(category, HttpStatus.OK);
+//    }
+
+    @GetMapping("/{sno}")
+    public List<CategoryDTO> getListBySno(@PathVariable("sno") Long sno){
+
+        return categoryService.getListBySno(sno);
     }
+
     @PutMapping("/{cateno}/modify")
     public ResponseEntity<Void> updateCategory(@PathVariable Long cateno, @RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(cateno, categoryDTO);

@@ -29,8 +29,6 @@ public class Product {
     @JsonIgnore
     private Category category;
 
-    private Long sno;
-
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
     @JsonIgnore
