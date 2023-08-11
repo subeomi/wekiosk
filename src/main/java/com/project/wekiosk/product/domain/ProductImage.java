@@ -21,9 +21,5 @@ public class ProductImage {
     @JoinColumn(name = "pno") // 외래키 지정
     private Product product;
 
-    public ProductImage(Product product, String fname) {
-        this.product = product;
-        this.fname = fname;
-    }
 
 }

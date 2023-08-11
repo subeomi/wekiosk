@@ -35,6 +35,8 @@ public class ProductTests {
              repo.save(product);
          }
      }
+
+
     @Transactional
     @Test
     public void testRead(){

@@ -11,10 +11,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long>{
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
-    Product save(Product product);
+//    Product save(Product product);
 
     @Query("select p.pname, p.pprice from Product p where p.pno = :pno")
     Product selectOne(@Param("pno") Long pno);
@@ -25,7 +25,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 
     List<Product> findByCategory(Category category);
+
     @EntityGraph(attributePaths = "images")
     @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.pno = :pno")
     Optional<Product> findProductInCategory(@Param("cateno") Long cateno, @Param("pno") Long pno);
+
 }

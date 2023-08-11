@@ -28,4 +28,6 @@ public interface ProductService {
 
     Long setProduct(ProductDTO productDTO);
 
+    void toggleShowProduct(Long cateno, List<Long> pnoList);
+
 }

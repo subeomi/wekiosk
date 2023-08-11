@@ -89,19 +89,46 @@ public class ProductController {
     }
 
 
-    @PutMapping("{cateno}/products/{pno}/modify")
-    public ResponseEntity<?> updateProduct(@PathVariable Long pno, @RequestBody ProductDTO productDTO) {
+    @PutMapping(value="{cateno}/products/{pno}/modify" ,consumes = "multipart/form-data")
+    public ResponseEntity<?> updateProduct(@PathVariable Long pno,
+                                           @ModelAttribute ProductDTO productDTO) {
         try {
+            List<String> uploadFileNames = null;
+            if (productDTO.getImages() != null && productDTO.getImages().size() > 0) {
 
-            System.out.println("pno: " + pno);
-            System.out.println("productDTO: " + productDTO);
+                uploadFileNames = uploader.uploadFiles(productDTO.getImages(), true);
+            }
+            List<String> gimages = productDTO.getGimages();
+            if (gimages == null) {
+                gimages = new ArrayList<>(); // 기존 데이터가 없을 경우 새로운 리스트 생성
+            }
+            if (uploadFileNames != null) {
+                gimages.addAll(uploadFileNames); // 새로운 이미지 파일명 추가
+            }
+                log.info(productDTO);
+            productDTO.setGimages(gimages);
+//                List<String> oldFileNames = productDTO.getGimages();
+//                log.info("11111111111");
+//                //if(productDTO.getGimages() != null) {
+//                    uploadFileNames.forEach(fname -> oldFileNames.add(fname));
+//                log.info("222222222");
 
             productService.modifyProduct(pno, productDTO);
-            return ResponseEntity.ok().build(); // 성공 응답
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build(); // 해당 상품을 찾지 못한 경우
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 기타 오류 발생 시
+
+                return ResponseEntity.ok().build(); // 성공 응답
+            } catch(NoSuchElementException e){
+                return ResponseEntity.notFound().build(); // 해당 상품을 찾지 못한 경우
+            } catch(Exception e){
+                log.info(e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 기타 오류 발생 시
+            }
         }
+
+    @PutMapping("{cateno}/toggleShow")
+    public Map<String, String> toggleShowProduct(@PathVariable("cateno") Long cateno, @RequestBody List<Long> pnoList){
+
+        productService.toggleShowProduct(cateno, pnoList);
+
+        return Map.of("result", "ok");
     }
 }
