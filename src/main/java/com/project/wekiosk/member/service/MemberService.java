@@ -11,7 +11,7 @@ public interface MemberService {
 
     String register(MemberDTO memberDTO);
 
-    MemberDTO getOne(String memail);
+    MemberProfileDTO getOne(String memail);
 
     void pwModifier(MemberDTO memberDTO);
 
@@ -26,4 +26,6 @@ public interface MemberService {
     int duplicateCheck(String memail);
 
     Map<String, Object> sendSimpleMessage(String to)throws Exception;
+
+
 }
