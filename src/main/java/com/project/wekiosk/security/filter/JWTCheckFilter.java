@@ -39,7 +39,7 @@ public class JWTCheckFilter extends OncePerRequestFilter  {
             return true;
         }
 
-        return false;
+        return true;
     }
 
     @Override

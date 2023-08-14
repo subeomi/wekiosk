@@ -106,13 +106,46 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO getOne(String memail) {
+    public MemberProfileDTO getOne(List<String> kakaoInfo) {
+
+        String memail = kakaoInfo.get(0);
+
+        log.info("==========================================================");
+        log.info(kakaoInfo.get(0));
+        log.info(kakaoInfo.get(1));
 
         Optional<Member> result = memberRepository.findById(memail);
 
-        Member member = result.orElseThrow();
+        if (result.isPresent()) {
 
-        MemberDTO dto = modelMapper.map(member, MemberDTO.class);
+            Member member = result.orElseThrow();
+
+            MemberProfileDTO dto = modelMapper.map(member, MemberProfileDTO.class);
+
+            return dto;
+        }
+
+        // 데이터베이스에 존재하지 않는 이메일이라면
+        Member socialMember = Member.builder()
+                .memail(memail)
+                .mpw(passwordEncoder.encode(UUID.randomUUID().toString()))
+                .mname(kakaoInfo.get(1))
+                .social(true)
+                .build();
+
+        memberRepository.save(socialMember);
+        try {
+            
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+        }
+
+        Member socialMemail = memberRepository.findById(socialMember.getMemail()).orElseThrow();
+
+        MemberProfileDTO dto = modelMapper.map(socialMemail, MemberProfileDTO.class);
+
 
         return dto;
     }
@@ -141,7 +174,6 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-
     private String ePw = createKey();
 
     private MimeMessage createMessage(String memail, String ePw) throws Exception {
@@ -150,8 +182,8 @@ public class MemberServiceImpl implements MemberService {
         log.info("인증 번호 : " + ePw);
         MimeMessage message = emailSender.createMimeMessage();
 
-        message.addRecipients(RecipientType.TO, memail);//보내는 대상
-        message.setSubject("WE'KIOSK 인증번호입니다.");//제목
+        message.addRecipients(RecipientType.TO, memail);// 보내는 대상
+        message.setSubject("WE'KIOSK 인증번호입니다.");// 제목
 
         String msgg = "";
         msgg += "<div style='margin:20px;'>";
@@ -167,8 +199,8 @@ public class MemberServiceImpl implements MemberService {
         msgg += "<strong>";
         msgg += ePw + "</strong><div><br/> ";
         msgg += "</div>";
-        message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("wekiosk@kiosk.com", "WEKIOSK"));//보내는 사람
+        message.setText(msgg, "utf-8", "html");// 내용
+        message.setFrom(new InternetAddress("wekiosk@kiosk.com", "WEKIOSK"));// 보내는 사람
 
         return message;
     }
@@ -192,7 +224,7 @@ public class MemberServiceImpl implements MemberService {
         // TODO Auto-generated method stub
         MimeMessage message = createMessage(memail, ePw);
 
-        try {//예외처리
+        try {// 예외처리
 
             emailSender.send(message);
             return Map.of("email", memail, "code", ePw);
@@ -202,6 +234,5 @@ public class MemberServiceImpl implements MemberService {
         }
 
     }
-
 
 }

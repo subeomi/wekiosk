@@ -48,6 +48,7 @@ public class CustomSecurityConfig {
         // POST - header는 x-www-form-urlencoded에서 username = user1@aaa.com, password = 1111
         http.formLogin(config -> {
             config.loginPage("/api/member/login");
+            config.loginPage("/api/member/kakao");
             config.successHandler(new APILoginSuccessHandler());
         });
 

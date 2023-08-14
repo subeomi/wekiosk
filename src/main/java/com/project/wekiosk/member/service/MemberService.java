@@ -4,6 +4,7 @@ import com.project.wekiosk.member.dto.MemberDTO;
 import com.project.wekiosk.member.dto.MemberProfileDTO;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Transactional
@@ -11,7 +12,7 @@ public interface MemberService {
 
     String register(MemberDTO memberDTO);
 
-    MemberDTO getOne(String memail);
+    MemberProfileDTO getOne(List<String> kakaoInfo);
 
     void pwModifier(MemberDTO memberDTO);
 
@@ -26,4 +27,6 @@ public interface MemberService {
     int duplicateCheck(String memail);
 
     Map<String, Object> sendSimpleMessage(String to)throws Exception;
+
+
 }
