@@ -7,8 +7,12 @@ import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.repository.ProductRepository;
 import com.project.wekiosk.store.dto.StoreDTO;
 import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+
+import lombok.extern.log4j.Log4j2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class OptionsServiceImpl implements OptionsService {
 //
     private final OptionsRepository optionsRepository;
@@ -47,9 +52,8 @@ public class OptionsServiceImpl implements OptionsService {
 @Override
 public void addOptions(String oname, Long oprice, Long pno) {
     // 옵션의 추가 순서를 데이터베이스에서 자동으로 관리하도록 설정
-    long maxOrd = optionsRepository.findMaxOrdByPno(pno).orElse(0L);
-    long newOrd = maxOrd + 1;
-
+    log.info("------------------------------");
+    log.info("addOptions");
     // pno를 사용하여 product 엔티티를 가져옴
     Product product = productRepository.findById(pno)
             .orElseThrow(() -> new IllegalArgumentException("Invalid pno: " + pno));
@@ -58,7 +62,6 @@ public void addOptions(String oname, Long oprice, Long pno) {
             .oname(oname)
             .oprice(oprice)
             .product(product) // product 엔티티를 설정하여 연관 관계를 맺음
-            .ord(newOrd)
             .build();
     optionsRepository.save(options);
 }

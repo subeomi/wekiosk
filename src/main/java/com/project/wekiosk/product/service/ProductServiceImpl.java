@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -42,12 +43,12 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> findProductInCategory(Long cateno, Long pno) {
         return productRepository.findProductInCategory(cateno, pno);
     }
+
     @Override
     public PageResponseDTO<ProductListDTO> list(PageRequestDTO requestDTO) {
         return null;
 
     }
-
 
 
     @Override
@@ -56,17 +57,18 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(productDTO.getCateno())
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다. cateno=" + productDTO.getCateno()));
 
-        Long savedPno = setProduct(productDTO); // setProduct() 메서드를 호출하여 상품과 옵션들을 데이터베이스에 저장하고, 생성한 상품의 pno 값을 얻습니다.
+        Long savedPno = setProduct(productDTO); // setProduct() 메서드를 호출하여 상품과 옵션들을 데이터베이스에 저장, 생성한 상품의 pno 값
         Product savedProduct = productRepository.findById(savedPno)
                 .orElseThrow(() -> new NoSuchElementException("생성한 상품을 찾을 수 없습니다. pno=" + savedPno));
 
+        productDTO.getGimages().forEach(fname -> {
+            savedProduct.addImage(fname);
+        });
         // 상품과 카테고리 연관 관계 설정
         savedProduct.setCategory(category);
 
-        // 실제로는 상품 정보와 옵션들을 데이터베이스에 저장하는 로직을 구현해야 합니다.
-        // 이후에 productRepository.save(savedProduct)와 같은 로직을 사용하여 실제 데이터베이스에 저장합니다.
 
-        return savedProduct.getPno(); // 생성한 상품의 pno를 반환합니다.
+        return savedProduct.getPno(); // 생성한 상품의 pno를 반환
     }
 
 
@@ -88,8 +90,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    public List<Product> getProductsByCategory(Long cateno) {
-        return productRepository.findAllByCategory(cateno);
+    public List<ProductDTO> getProductsByCategory(Long cateno) {
+        List<Product> result = productRepository.findAllByCategory(cateno);
+
+        List<ProductDTO> dtoList = result.stream()
+                .map(product -> ProductDTO.builder()
+                        .pprice(product.getPprice())
+                        .pname(product.getPname())
+                        .gimages(product.getImages().stream().map(img -> img.getFname()).collect(Collectors.toList()))
+                        .cateno(product.getCategory().getCateno())
+                        .options(product.getOptions().stream().map(option -> OptionsDTO.builder()
+                                .pno(option.getProduct().getPno())
+                                .ord(option.getOrd())
+                                .oname(option.getOname())
+                                .oprice(option.getOprice())
+                                .build()).collect(Collectors.toList()))
+                        .pno(product.getPno())
+                        .build())
+                .collect(Collectors.toList());
+
+        return dtoList;
     }
 
     private ProductDTO toDTO(Product product) {
@@ -101,11 +121,7 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Product> result = productRepository.findProductInCategory(cateno, pno);
 
-        log.info("r >>>>>>> "+ result);
-
         Product product = result.orElseThrow();
-
-        log.info("p >>>>>>> "+ product.getImages());
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
 
@@ -120,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
                         .oprice(options.getOprice())
                         .ord(options.getOrd())
                         .build()).collect(Collectors.toList()))
-                .gimages(product.getImages().stream().map(image-> image.getFname()).collect(Collectors.toList()))
+                .gimages(product.getImages().stream().map(image -> image.getFname()).collect(Collectors.toList()))
                 .pno(product.getPno())
                 .build();
 
@@ -146,11 +162,10 @@ public class ProductServiceImpl implements ProductService {
                         .oprice(optionsDTO.getOprice())
                         .product(product)
                         .build();
-                // 옵션 엔티티를 저장합니다.
+
                 optionsRepository.save(option);
             }
         }
-
 
 
         Product savedProduct = productRepository.save(product);
@@ -158,41 +173,85 @@ public class ProductServiceImpl implements ProductService {
         return savedProduct.getPno(); // 생성한 상품의 pno를 반환합니다.
     }
 
-
     @Override
-    public void modifyProduct(Long pno, ProductDTO productDTO) {
-        Product existingProduct = productRepository.findById(pno)
-                .orElseThrow(() -> new NoSuchElementException("해당 상품을 찾을 수 없습니다. pno: " + pno));
+    public void toggleShowProduct(Long cateno, List<Long> pnoList) {
 
-        // 상품 정보 업데이트
-        existingProduct.setPname(productDTO.getPname());
-        existingProduct.setPprice(productDTO.getPprice());
+        // 카테고리에 해당하는 기존 상품들의 상태를 false로 수정
+        List<Product> res = productRepository.findAllByCategory(cateno);
 
-        // 옵션 정보 업데이트
-        List<OptionsDTO> optionsDTOList = productDTO.getOptions();
-        List<Options> options = convertToOptionEntities(optionsDTOList, existingProduct);
-        existingProduct.setOptions(options);
+        for (Product product : res) {
 
-        // 파일 업로드 및 이미지 정보 설정
-        List<MultipartFile> newImages = productDTO.getImages();
-        if (!newImages.isEmpty()) {
-            // 기존 이미지 삭제
-            List<ProductImage> existingImages = existingProduct.getImages();
-            List<String> existingImageFileNames = existingImages.stream()
-                    .map(ProductImage::getFname)
-                    .collect(Collectors.toList());
-            fileUploader.removeFiles(existingImageFileNames);
+            product.changeShow(false);
 
-            // 새로운 이미지 추가
-            List<String> newImageFileNames = fileUploader.uploadFiles(newImages, true);
-            List<ProductImage> newProductImages = newImageFileNames.stream()
-                    .map(imageFileName -> new ProductImage(existingProduct, imageFileName))
-                    .collect(Collectors.toList());
-            existingProduct.setImages(newProductImages);
+            productRepository.save(product);
         }
 
-        // 상품 엔티티를 데이터베이스에 저장합니다.
-        productRepository.save(existingProduct);
+
+        // 키오스크에 보여줄 상품만 true로 수정
+        for (Long pno : pnoList) {
+
+            Optional<Product> result = productRepository.findById(pno);
+
+            Product product = result.orElseThrow();
+
+            product.changeShow(true);
+
+            productRepository.save(product);
+        }
+    }
+
+
+    @Override
+    public void modifyProduct(Long pno, @ModelAttribute ProductDTO productDTO) {
+        Optional<Product> result = productRepository.findById(productDTO.getPno());
+
+        Product product = result.orElseThrow();
+        // 상품 정보 업데이트
+
+        product.setPname(productDTO.getPname());
+        product.setPprice(productDTO.getPprice());
+
+        // 옵션 정보 업데이트
+
+        List<OptionsDTO> optionsDTOList = productDTO.getOptions();
+        List<Options> newOptions = convertToOptionEntities(optionsDTOList, product);
+
+        product.getOptions().clear();
+        product.getOptions().addAll(newOptions);
+
+
+        // 파일 업로드 및 이미지 정보 설정
+        List<String> oldFileNames = product.getImages().stream().map(pi -> pi.getFname()).collect(Collectors.toList());
+        log.info("before---------------------------------" + product.getImages());
+        product.clearImages();
+        log.info("---------------------------------" + productDTO.getImages());
+        log.info("-------GGGGGGGGG--------------------------" + productDTO.getGimages());
+//        이미지 문자열들을 추가 addImage( )
+        if(productDTO.getGimages() != null) {
+        productDTO.getGimages().forEach(fname -> {
+            log.info("before fname---------------------------" + fname);
+            product.addImage(fname);
+            log.info("fname---------------------------"+ fname);
+        });
+        }
+        try {
+            log.info(product);
+            productRepository.save(product);
+        } catch (Exception e) {
+            log.error("save ERROR", e);
+        }
+        log.info("--------------images-------------------");
+        if (productDTO.getGimages() != null) {
+            List<String> newFiles = productDTO.getGimages();
+            List<String> wantDeleteFiles = oldFileNames.stream()
+                    .filter(f -> newFiles.indexOf(f) == -1)
+                    .collect(Collectors.toList());
+            log.info("---------------------------------");
+            log.info(wantDeleteFiles);
+
+            fileUploader.removeFiles(wantDeleteFiles);
+        }
+
     }
 
     private List<Options> convertToOptionEntities(List<OptionsDTO> optionsDTOList, Product existingProduct) {

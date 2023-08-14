@@ -15,4 +15,5 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT c FROM Category c WHERE c.store.sno = :sno")
     List<Category> getListBySno(Long sno);
 
+
 }

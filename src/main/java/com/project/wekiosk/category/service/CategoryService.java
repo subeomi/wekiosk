@@ -5,7 +5,7 @@ import com.project.wekiosk.category.dto.CategoryDTO;
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryDTO> getAllCategories();
+    List<CategoryDTO> getAllCategories(Long sno);
 
     List<CategoryDTO> getListBySno(Long sno);
 

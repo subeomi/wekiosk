@@ -73,4 +73,5 @@ public class ProductDTO {
     public void setPno(Long pno) {
         this.pno = pno;
     }
+
 }

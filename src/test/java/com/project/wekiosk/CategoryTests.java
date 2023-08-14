@@ -10,8 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CategoryTests {
+
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Autowired
     private StoreRepository storeRepository;
@@ -19,10 +22,9 @@ public class CategoryTests {
     @Test
     public void insertCategory() {
 
-        Store store = storeRepository.findById(27L).orElseThrow();
-
+        Store store = storeRepository.findById(2L).orElseThrow();
         Category category = Category.builder()
-                .catename("면류")
+                .catename("drink")
                 .store(store)
                 .build();
 
@@ -39,10 +41,6 @@ public class CategoryTests {
 //            return;
 //        }
 
-//        if (!foundCategory.getSno().equals(100L)) {
-//            System.out.println("Sno mismatch");
-//            return;
-//        }
 
         System.out.println("Test passed");
     }
@@ -50,7 +48,7 @@ public class CategoryTests {
     @Test
     public void testDeleteCategory() {
 
-        Store store = storeRepository.findById(100L).orElseThrow();
+        Store store = storeRepository.findById(2L).orElseThrow();
 
         Category category = Category.builder()
                 .cateno(1L)
