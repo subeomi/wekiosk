@@ -110,7 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Map<String, Long> salesMap = new HashMap<>();
 
-        // 해당 일 결제 상태 건수 // [결제완료, 환불]
+        // 해당 일 결제 상태 건수 // [complete, refund]
         repository.pStatusCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .forEach(result -> {
                     String status = (String) result[0];
@@ -118,7 +118,7 @@ public class PaymentServiceImpl implements PaymentService {
                     salesMap.put(status, count);
                 });
 
-        // 해당 일 주문 상태 건수 // [준비중, 완료]
+        // 해당 일 주문 상태 건수 // [preparing, prepared]
         repository.oStatusCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .forEach(result -> {
                     String status = (int) result[0] == 0 ? "preparing" : "prepared";
