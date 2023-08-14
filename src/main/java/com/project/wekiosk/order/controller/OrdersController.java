@@ -19,6 +19,9 @@ public class OrdersController {
 
     @PostMapping("")
     public Long register(@RequestBody OrderDTO orderDTO){
+
+        log.info("DTO: " + orderDTO);
+
         return ordersService.register(orderDTO);
     }
 

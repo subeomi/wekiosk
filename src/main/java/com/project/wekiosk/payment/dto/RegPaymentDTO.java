@@ -19,10 +19,11 @@ public class RegPaymentDTO {
 
     private String pay_method;
 
-    private String pay_status;
+    @Builder.Default
+    private String pay_status = "complete";
 
     private LocalDateTime pay_date;
 
-    private int ono;
+    private Long ono;
 
 }

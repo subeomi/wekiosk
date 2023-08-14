@@ -15,7 +15,8 @@ public class OrderDTO {
 
     private Long ono;
 
-    private int ostatus;
+    @Builder.Default
+    private int ostatus = 0;
 
     private Long sno;
 
