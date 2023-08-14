@@ -26,6 +26,7 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Orders orders;
 
@@ -44,5 +45,6 @@ public class OrderDetail {
         options.add(option);
 
     }
+
 
 }

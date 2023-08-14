@@ -6,9 +6,18 @@ import com.project.wekiosk.category.repository.CategoryRepository;
 import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.repository.ProductRepository;
+
+import com.project.wekiosk.store.domain.Store;
+import com.project.wekiosk.store.dto.StoreDTO;
+
+import com.project.wekiosk.store.repository.StoreRepository;
 import com.project.wekiosk.util.FileUploader;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
+import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +26,35 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final StoreRepository storeRepository;
+
+    private final ModelMapper modelMapper;
 
     private final FileUploader fileUploader = new FileUploader();
 
-    @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository) {
-        this.categoryRepository = categoryRepository;
-        this.productRepository = productRepository;
+
+    private final FileUploader fileUploader = new FileUploader();
+
+
+    @Override
+    public List<CategoryDTO> getAllCategories(Long sno) {
+        List<Category> categories = categoryRepository.findCategoriesBySno(sno);
+        return categories.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<CategoryDTO> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
+    public List<CategoryDTO> getListBySno(Long sno) {
+
+        List<Category> categories = categoryRepository.getListBySno(sno);
+        // Store 엔티티를 StoreDTO로 변환하여 리스트로 반환합니다.
         return categories.stream()
-                .map(this::mapToDTO)
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -92,7 +113,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDTO.builder()
                 .cateno(category.getCateno())
                 .catename(category.getCatename())
-                .sno(category.getSno())
+                .sno(category.getStore().getSno())
                 .build();
     }
 
@@ -100,7 +121,7 @@ public class CategoryServiceImpl implements CategoryService {
         return Category.builder()
                 .cateno(categoryDTO.getCateno())
                 .catename(categoryDTO.getCatename())
-                .sno(categoryDTO.getSno())
+                .store(storeRepository.findById(categoryDTO.getSno()).orElseThrow())
                 .build();
     }
 }
