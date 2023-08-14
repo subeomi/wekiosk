@@ -1,5 +1,6 @@
 package com.project.wekiosk.payment.repository;
 
+import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.payment.domain.Payment;
 
 import com.project.wekiosk.payment.repository.search.PaymentSearch;
@@ -24,5 +25,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>, Payment
 
     @Query("select o.ostatus, count(*) from Payment p left outer join Orders o on p.orders = o where o.store.sno = :sno and YEAR(p.pay_date) = :year and MONTH(p.pay_date) = :month and DAY(p.pay_date) = :day group by o.ostatus")
     List<Object[]> oStatusCount(@Param("sno") Long sno, @Param("year") int year, @Param("month") int month, @Param("day") int day);
+
+//    @Query("select o from Payment p left outer join Orders o on p.orders = o left outer join OrderDetail d on o.details = d where p.payno = :payno")
+//    List<Options[]> getOptionInfo(@Param("payno") Long payno);
 
 }

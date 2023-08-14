@@ -23,6 +23,6 @@ public class RegPaymentDTO {
 
     private LocalDateTime pay_date;
 
-    private int ono;
+    private Long ono;
 
 }

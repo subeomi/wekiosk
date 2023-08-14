@@ -1,5 +1,6 @@
 package com.project.wekiosk.repositoryTests;
 
+import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.payment.domain.Payment;
 import com.project.wekiosk.payment.repository.PaymentRepository;
 import jakarta.transaction.Transactional;
@@ -124,5 +125,13 @@ public class PaymentTests {
 //        log.info(">>>>test" + repository.tsaleCount(1L, lc.getYear(), lc.getMonthValue(), lc.getDayOfMonth()));
 //        List<Object[]> list = repository.oStatusCount(1L, lc.getYear(), lc.getMonthValue(), lc.getDayOfMonth());
 
+    }
+
+    @Test
+    public void testGetOptionInfo() {
+
+//        List<Options[]> optionInfo = repository.getOptionInfo(47L);
+//
+//        optionInfo.forEach(on-> log.info(on));
     }
 }

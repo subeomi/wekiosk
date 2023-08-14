@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"store", "Details"})
+@ToString(exclude = {"store"})
 @Table(name = "orders")
 public class Orders {
 
@@ -25,25 +25,6 @@ public class Orders {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Store store;
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<OrderDetail> Details = new ArrayList<>();
-
-    public void addOrderDetail(int count, Product product) {
-
-        OrderDetail detail = OrderDetail.builder()
-                .quantity(count)
-                .product(product)
-                .build();
-
-        Details.add(detail);
-
-    }
-
-    public void clearDetails(){
-        Details.clear();
-    }
 
     public void changeOstatus(int ostatus){
         this.ostatus = ostatus;

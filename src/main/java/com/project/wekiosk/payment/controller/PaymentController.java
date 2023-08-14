@@ -26,11 +26,6 @@ public class PaymentController {
         return service.list(sno, requestDTO);
     }
 
-//    @GetMapping("/count/{sno}")
-//    public Long count(@PathVariable("sno") Long sno, @RequestParam("date") LocalDate date){
-//
-//    }
-
     @GetMapping("/{payno}")
     public PaymentDTO getOne(@PathVariable("payno") Long payno) {
 
