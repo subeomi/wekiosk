@@ -10,5 +10,7 @@ public interface OptionsService {
 
     void addOptions(String oname, Long oprice, Long pno);
 
+    List<OptionsDTO> getOptionListByPno(Long pno);
+
 
 }

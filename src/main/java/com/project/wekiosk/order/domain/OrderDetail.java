@@ -17,4 +17,5 @@ public class OrderDetail {
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
 
+
 }

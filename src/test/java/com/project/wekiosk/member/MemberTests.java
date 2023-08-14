@@ -21,10 +21,12 @@ public class MemberTests {
     public void testInsert(){
 
         Member member = Member.builder()
-                .memail("admin@kiosk.com")
-                .mpw("1111")
-                .mname("밥샵")
+                .memail("lsb@kiosk.com")
+                .mpw(passwordEncoder.encode("1111"))
+                .mname("이아무개")
                 .build();
+
+        member.addRole(MemberRole.USER);
 
         repository.save(member);
     }
@@ -54,6 +56,19 @@ public class MemberTests {
 
         }
 
+
+    }
+
+    @Test
+    public void insertRole() {
+
+        Member member = Member.builder()
+                .memail("lsb@kiosk.com")
+                .build();
+
+        member.addRole(MemberRole.USER);
+
+        repository.save(member);
     }
 
 }

@@ -2,6 +2,7 @@ package com.project.wekiosk.option.controller;
 
 import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.option.service.OptionsService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,11 @@ public class OptionsController {
         log.info(optionsDTO);
     }
 
+    @GetMapping("{pno}")
+    public List<OptionsDTO> getList(@PathVariable("pno")Long pno){
 
+        return optionsService.getOptionListByPno(pno);
+    }
 
 //    @GetMapping("/{pno}/{ord}")
 //    public ResponseEntity<OptionsDTO> getOptions(@PathVariable Long pno, @PathVariable Long ord) {
