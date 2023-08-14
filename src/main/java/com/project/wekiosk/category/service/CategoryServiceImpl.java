@@ -37,12 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
     private final FileUploader fileUploader = new FileUploader();
 
 
-    private final FileUploader fileUploader = new FileUploader();
-
-
     @Override
     public List<CategoryDTO> getAllCategories(Long sno) {
-        List<Category> categories = categoryRepository.findCategoriesBySno(sno);
+        List<Category> categories = categoryRepository.getListBySno(sno);
         return categories.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());

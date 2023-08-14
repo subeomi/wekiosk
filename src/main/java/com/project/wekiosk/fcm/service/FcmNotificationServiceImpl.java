@@ -51,6 +51,28 @@ public class FcmNotificationServiceImpl implements FcmNotificationService {
         send(message);
     }
 
+    @Override
+    public void sendPaymentInfo(String email) {
+
+        Optional<Member> result = memberRepository.findById(email);
+        Member member = result.orElseThrow();
+
+        if (member.getFcmtoken() == null) {
+            log.info("-- -- -- FCM TOKEN IS NULL -- -- --");
+            return;
+        }
+
+        String token = member.getFcmtoken();
+        Message message = Message.builder()
+                .putData("title", "신규 주문 안내")
+                .putData("body", "새로운 주문이 등록되었습니다.")
+                .setToken(token)
+                .build();
+
+        send(message);
+    }
+
+
     public void send(Message message) {
         FirebaseMessaging.getInstance().sendAsync(message);
     }

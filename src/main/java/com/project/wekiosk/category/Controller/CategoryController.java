@@ -25,21 +25,22 @@ public class CategoryController {
         categoryService.registerCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     @GetMapping("/list/{sno}")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(@PathVariable("sno") Long sno){
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(@PathVariable("sno") Long sno) {
         List<CategoryDTO> categories = categoryService.getAllCategories(sno);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
 
-
-    @GetMapping("/{sno}")
-    public List<CategoryDTO> getListBySno(@PathVariable("sno") Long sno){
+    @GetMapping("/{sno}/store")
+    public List<CategoryDTO> getListBySno(@PathVariable("sno") Long sno) {
 
         return categoryService.getListBySno(sno);
+    }
 
     @GetMapping("/{cateno}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("cateno") Long cateno){
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("cateno") Long cateno) {
         CategoryDTO category = categoryService.getCategoryById(cateno);
         return new ResponseEntity<>(category, HttpStatus.OK);
 
@@ -50,6 +51,7 @@ public class CategoryController {
         categoryService.updateCategory(cateno, categoryDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @DeleteMapping("/{cateno}/delete")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long cateno) {
         categoryService.deleteCategory(cateno);
