@@ -1,6 +1,7 @@
 package com.project.wekiosk.category.domain;
 
 import com.project.wekiosk.product.domain.Product;
+import com.project.wekiosk.store.domain.Store;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +21,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cateno;
     private String catename;
-    private Long sno;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Store store;
 
     public Category(Long cateno) {
         this.cateno = cateno;

@@ -1,6 +1,6 @@
 package com.project.wekiosk.product.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.wekiosk.option.domain.Options;
 import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
@@ -28,9 +28,10 @@ public class ProductController {
 
 
     @PostMapping(value = "{cateno}/products", consumes = "multipart/form-data")
-    public ResponseEntity<ProductDTO> register(
+    public ResponseEntity<Long> register(
             @PathVariable Long cateno,
-            @ModelAttribute ProductDTO productDTO, List<MultipartFile> images) {
+            @ModelAttribute ProductDTO productDTO,
+            @RequestParam("images") List<MultipartFile> images) {
         try {
             productDTO.setCateno(cateno);
 
@@ -50,18 +51,18 @@ public class ProductController {
                 uploadedImageFileNames = uploader.uploadFiles(images, true);
             }
 
+            productDTO.setGimages(uploadedImageFileNames);
             Long registeredProduct = productService.register(productDTO);
             log.info(productDTO);
 
-            // 등록된 상품 정보를 다시 응답
-            return ResponseEntity.ok(productDTO);
+            // 결과 반환
+            return ResponseEntity.ok(registeredProduct);
         } catch (Exception e) {
             // 오류 처리
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
 
 
@@ -73,8 +74,8 @@ public class ProductController {
     }
 
     @GetMapping("{cateno}/products")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable Long cateno) {
-        List<Product> products = productService.getProductsByCategory(cateno);
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable Long cateno) {
+        List<ProductDTO> products = productService.getProductsByCategory(cateno);
         log.info(products);
         return ResponseEntity.ok(products);
     }
@@ -82,29 +83,52 @@ public class ProductController {
 
     @GetMapping("{cateno}/products/{pno}")
     public ResponseEntity<ProductDTO> getOne(@PathVariable("cateno") Long cateno, @PathVariable("pno") Long pno) {
-        log.info("-------------------------------------");
-        log.info("Cateno-" + cateno);
-        log.info("PNO-" + pno);
-        log.info("-------------------------------------");
         ProductDTO productDTO = productService.readOneInCategory(cateno, pno);
 
         return ResponseEntity.ok(productDTO);
     }
 
 
-    @PutMapping("{cateno}/products/{pno}/modify")
-    public ResponseEntity<?> updateProduct(@PathVariable Long pno, @RequestBody ProductDTO productDTO) {
+    @PutMapping(value="{cateno}/products/{pno}/modify" ,consumes = "multipart/form-data")
+    public ResponseEntity<?> updateProduct(@PathVariable Long pno,
+                                           @ModelAttribute ProductDTO productDTO) {
         try {
+            List<String> uploadFileNames = null;
+            if (productDTO.getImages() != null && productDTO.getImages().size() > 0) {
 
-            System.out.println("pno: " + pno);
-            System.out.println("productDTO: " + productDTO);
+                uploadFileNames = uploader.uploadFiles(productDTO.getImages(), true);
+            }
+            List<String> gimages = productDTO.getGimages();
+            if (gimages == null) {
+                gimages = new ArrayList<>(); // 기존 데이터가 없을 경우 새로운 리스트 생성
+            }
+            if (uploadFileNames != null) {
+                gimages.addAll(uploadFileNames); // 새로운 이미지 파일명 추가
+            }
+                log.info(productDTO);
+            productDTO.setGimages(gimages);
+//                List<String> oldFileNames = productDTO.getGimages();
+//                log.info("11111111111");
+//                //if(productDTO.getGimages() != null) {
+//                    uploadFileNames.forEach(fname -> oldFileNames.add(fname));
+//                log.info("222222222");
 
             productService.modifyProduct(pno, productDTO);
-            return ResponseEntity.ok().build(); // 성공 응답
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build(); // 해당 상품을 찾지 못한 경우
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 기타 오류 발생 시
+
+                return ResponseEntity.ok().build(); // 성공 응답
+            } catch(NoSuchElementException e){
+                return ResponseEntity.notFound().build(); // 해당 상품을 찾지 못한 경우
+            } catch(Exception e){
+                log.info(e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 기타 오류 발생 시
+            }
         }
+
+    @PutMapping("{cateno}/toggleShow")
+    public Map<String, String> toggleShowProduct(@PathVariable("cateno") Long cateno, @RequestBody List<Long> pnoList){
+
+        productService.toggleShowProduct(cateno, pnoList);
+
+        return Map.of("result", "ok");
     }
 }

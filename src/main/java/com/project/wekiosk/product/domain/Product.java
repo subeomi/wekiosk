@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Entity
+@ToString(exclude = {"category", "images", "options"})
+//@ToString(exclude = {"images", "options"})
 public class Product {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +26,12 @@ public class Product {
     private String pname;
     private Long pprice;
 
+    private boolean isShow;
+
     @ManyToOne
     @JoinColumn(name = "cateno", referencedColumnName = "cateno")
     @JsonIgnore
     private Category category;
-
-    private Long sno;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Builder.Default
@@ -38,14 +40,21 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    @JsonIgnore
     private List<Options> options = new ArrayList<>();
 
 
     public void addImage(String name) {
-        ProductImage pImage = ProductImage.builder().fname(name)
-                .ord(images.size()).build();
+        ProductImage pImage = ProductImage.builder().fname(name).build();
         images.add(pImage);
+    }
+
+
+    public void clearOptions() {
+        options.clear();
+    }
+
+    public void clearImages() {
+        images.clear();
     }
 
     public void setCategory(Category category) {
@@ -57,5 +66,21 @@ public class Product {
     }
 
     public void setCateno(Long cateno) {
+    }
+
+    public void changeShow(boolean isShow){
+        this.isShow = isShow;
+    }
+
+    public void changePname(String pname){
+        this.pname = pname;
+    }
+
+    public void changePprice(Long pprice){
+        this.pprice = pprice;
+    }
+
+    public void changeOptions(List<Options> options){
+        this.options = options;
     }
 }

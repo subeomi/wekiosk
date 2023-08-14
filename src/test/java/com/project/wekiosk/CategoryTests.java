@@ -2,20 +2,26 @@ package com.project.wekiosk;
 
 import com.project.wekiosk.category.domain.Category;
 import com.project.wekiosk.category.repository.CategoryRepository;
+import com.project.wekiosk.store.domain.Store;
+import com.project.wekiosk.store.repository.StoreRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CategoryTests {
+
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
     @Test
     public void insertCategory() {
+        Store store = storeRepository.findById(2L).orElseThrow();
         Category category = Category.builder()
-                .catename("TestCategory")
-                .sno(2L)
+                .catename("drink")
+                .store(store)
                 .build();
 
         categoryRepository.save(category);
@@ -31,20 +37,17 @@ public class CategoryTests {
             return;
         }
 
-        if (!foundCategory.getSno().equals(100L)) {
-            System.out.println("Sno mismatch");
-            return;
-        }
 
         System.out.println("Test passed");
     }
 
     @Test
     public void testDeleteCategory() {
+        Store store = storeRepository.findById(2L).orElseThrow();
         Category category = Category.builder()
                 .cateno(1L)
                 .catename("TestCategory")
-                .sno(100L)
+                .store(store)
                 .build();
 
         categoryRepository.save(category);

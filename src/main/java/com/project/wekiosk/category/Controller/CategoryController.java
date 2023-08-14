@@ -25,14 +25,14 @@ public class CategoryController {
         categoryService.registerCategory(categoryDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-    @GetMapping("")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(){
-        List<CategoryDTO> categories = categoryService.getAllCategories();
+    @GetMapping("/list/{sno}")
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(@PathVariable("sno") Long sno){
+        List<CategoryDTO> categories = categoryService.getAllCategories(sno);
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @GetMapping("/{cateno}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long cateno){
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("cateno") Long cateno){
         CategoryDTO category = categoryService.getCategoryById(cateno);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
