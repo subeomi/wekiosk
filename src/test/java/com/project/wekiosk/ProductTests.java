@@ -21,11 +21,13 @@ public class ProductTests {
 
      @Test
      public void testInsert() {
+
          Category category = new Category(23L);
 
-         for (int i = 0; i < 10; i++) {
+
+         for (int i = 0; i < 7; i++) {
              Product product = Product.builder()
-                     .pname("Example Product")
+                     .pname("닭칼국수")
                      .pprice(10000L)
                      .category(category) // 영속 상태의 Category 엔티티를 설정
                      .build();

@@ -1,13 +1,23 @@
 package com.project.wekiosk.payment.service;
 
+import com.project.wekiosk.option.domain.Options;
+import com.project.wekiosk.option.dto.OptionsDTO;
+import com.project.wekiosk.option.repository.OptionsRepository;
+import com.project.wekiosk.order.domain.OrderDetail;
+import com.project.wekiosk.order.domain.Orders;
+import com.project.wekiosk.order.repository.OrderDetailRepository;
 import com.project.wekiosk.order.repository.OrdersRepository;
 import com.project.wekiosk.payment.domain.Payment;
 import com.project.wekiosk.payment.dto.*;
 import com.project.wekiosk.payment.repository.PaymentRepository;
+import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.dto.ProductDTO;
+import com.project.wekiosk.product.repository.ProductRepository;
+import jakarta.persistence.Embeddable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +29,8 @@ import java.util.*;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository repository;
+    private final OrdersRepository ordersRepository;
+    private final OrderDetailRepository detailRepository;
 
     private final ModelMapper modelMapper;
 
@@ -31,18 +43,35 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentDTO getOne(Long payno) {
 
-        Optional<Payment> result = repository.findById(payno);
+        Payment payment = repository.findById(payno).orElseThrow();
 
-        Payment payment = result.orElseThrow();
+        List<ProductDTO> productList = new ArrayList<>();
 
-        List<ProductDTO> product = new ArrayList<>();
-        payment.getOrders().getDetails().forEach(d ->
-                product.add(ProductDTO.builder()
+        Orders orders = ordersRepository.findById(payment.getOrders().getOno()).orElseThrow();
+
+        List<OrderDetail> detailList = detailRepository.selectDetilList(orders.getOno());
+
+        detailList.forEach(d -> {
+
+            List<OptionsDTO> optionsList = new ArrayList<>();
+
+            d.getOptions().forEach(o -> {
+                optionsList.add(OptionsDTO.builder()
                         .pno(d.getProduct().getPno())
-                        .pname(d.getProduct().getPname())
-                        .pprice(d.getProduct().getPprice())
-                        .quantity(d.getQuantity())
-                        .build()));
+                        .oname(o.getOname())
+                        .oprice(o.getOprice())
+                        .ord(o.getOrd())
+                        .build());
+            });
+
+            productList.add(ProductDTO.builder()
+                    .pno(d.getProduct().getPno())
+                    .pname(d.getProduct().getPname())
+                    .pprice(d.getProduct().getPprice())
+                    .quantity(d.getQuantity())
+                    .options(optionsList)
+                    .build());
+        });
 
         return PaymentDTO.builder()
                 .payno(payment.getPayno())
@@ -51,7 +80,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .pay_status(payment.getPay_status())
                 .pay_date(payment.getPay_date())
                 .ostatus(payment.getOrders().getOstatus())
-                .products(product)
+                .products(productList)
                 .ono(payment.getOrders().getOno())
                 .build();
     }
@@ -81,11 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Map<String, Long> salesMap = new HashMap<>();
 
-        // 해당 일 판매 건수
-//        Long saleCount = repository.saleCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-//        salesMap.put("saleCount", saleCount);
-
-        // 해당 일 결제 상태 건수 // [결제완료, 환불]
+        // 해당 일 결제 상태 건수 // [complete, refund]
         repository.pStatusCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .forEach(result -> {
                     String status = (String) result[0];
@@ -93,7 +118,7 @@ public class PaymentServiceImpl implements PaymentService {
                     salesMap.put(status, count);
                 });
 
-        // 해당 일 주문 상태 건수 // [준비중, 완료]
+        // 해당 일 주문 상태 건수 // [preparing, prepared]
         repository.oStatusCount(sno, date.getYear(), date.getMonthValue(), date.getDayOfMonth())
                 .forEach(result -> {
                     String status = (int) result[0] == 0 ? "preparing" : "prepared";
@@ -111,7 +136,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         // 전달 월 매출 합계
         date = date.minusMonths(1);
+
         Long lastSale = repository.lastMonthSale(sno, date.getYear(), date.getMonthValue());
+
         salesMap.put(date.toString().substring(0, 7), lastSale == null ? 0L : lastSale);
 
         return salesMap;

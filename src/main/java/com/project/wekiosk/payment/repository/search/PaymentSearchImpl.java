@@ -37,8 +37,10 @@ public class PaymentSearchImpl extends QuerydslRepositorySupport implements Paym
 
         JPQLQuery<Payment> query = from(payment);
         query.leftJoin(payment.orders, orders);
-        query.leftJoin(payment.orders.Details, detail);
-        query.leftJoin(detail.product, product);
+//        query.leftJoin(detail.orders, orders);
+        query.leftJoin(detail).on(detail.orders.eq(orders));
+//        query.leftJoin(detail.product, product);
+        query.leftJoin(product).on(product.eq(detail.product));
 
         query.where(orders.store.sno.eq(sno));
 

@@ -29,8 +29,6 @@ public class MemberDTO extends User implements OAuth2User{
 
     private boolean social;
 
-
-
     public MemberDTO(String memail, String mpw, String mname, boolean social, List<String> roleNames, int mstatus, String fcmtoken){
 
         super(memail, mpw,

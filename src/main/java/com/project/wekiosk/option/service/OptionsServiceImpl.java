@@ -5,28 +5,37 @@ import com.project.wekiosk.option.dto.OptionsDTO;
 import com.project.wekiosk.option.repository.OptionsRepository;
 import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.repository.ProductRepository;
+import com.project.wekiosk.store.dto.StoreDTO;
 import jakarta.transaction.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+
 import lombok.extern.log4j.Log4j2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 @Log4j2
 public class OptionsServiceImpl implements OptionsService {
 //
     private final OptionsRepository optionsRepository;
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    public OptionsServiceImpl(OptionsRepository optionsRepository, ProductRepository productRepository) {
-        this.optionsRepository = optionsRepository;
-        this.productRepository = productRepository;
-    }
+//    @Autowired
+//    public OptionsServiceImpl(OptionsRepository optionsRepository, ProductRepository productRepository) {
+//        this.optionsRepository = optionsRepository;
+//        this.productRepository = productRepository;
+//    }
 //
     @Override
     public List<OptionsDTO> getAllOptions(){
@@ -56,7 +65,18 @@ public void addOptions(String oname, Long oprice, Long pno) {
             .build();
     optionsRepository.save(options);
 }
-//
+
+    @Override
+    public List<OptionsDTO> getOptionListByPno(Long pno) {
+
+        List<Options> options = optionsRepository.getListByPno(pno);
+
+        return options.stream()
+                .map(option -> modelMapper.map(option, OptionsDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    //
 //
 //
 //

@@ -7,11 +7,15 @@ import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.repository.ProductRepository;
 import com.project.wekiosk.store.domain.Store;
+import com.project.wekiosk.store.domain.Store;
+import com.project.wekiosk.store.dto.StoreDTO;
 import com.project.wekiosk.store.repository.StoreRepository;
 import com.project.wekiosk.util.FileUploader;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,16 +32,33 @@ public class CategoryServiceImpl implements CategoryService {
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
 
+    private final ModelMapper modelMapper;
+
     private final FileUploader fileUploader = new FileUploader();
+
 
     @Override
     public List<CategoryDTO> getAllCategories(Long sno) {
+
         List<Category> categories = categoryRepository.findCategoriesBySno(sno);
         System.out.println("snoooooooooooooo"+ sno);
+
+        //List<Category> categories = categoryRepository.getListBySno(sno);
+
         return categories.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<CategoryDTO> getListBySno(Long sno) {
+
+        List<Category> categories = categoryRepository.getListBySno(sno);
+        // Store 엔티티를 StoreDTO로 변환하여 리스트로 반환합니다.
+        return categories.stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

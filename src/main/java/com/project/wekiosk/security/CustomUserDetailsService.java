@@ -1,5 +1,6 @@
 package com.project.wekiosk.security;
 
+import com.project.wekiosk.fcm.service.FcmNotificationService;
 import com.project.wekiosk.member.domain.Member;
 import com.project.wekiosk.member.dto.MemberDTO;
 import com.project.wekiosk.member.repository.MemberRepository;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
+
+    private final FcmNotificationService fcmNotificationService;
 
     private final MemberRepository memberRepository;
 
@@ -46,6 +49,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getFcmtoken()
 
         );
+
+        fcmNotificationService.sendLoginInfo(memberDTO.getMemail());
 
         log.info("★★★★★★★★★★★★★★★★★★★★★★★★★★"+memberDTO);
 
