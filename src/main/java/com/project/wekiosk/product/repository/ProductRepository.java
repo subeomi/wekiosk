@@ -30,4 +30,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.pno = :pno")
     Optional<Product> findProductInCategory(@Param("cateno") Long cateno, @Param("pno") Long pno);
 
+    boolean existsByCategory(Category category);
+
+    @EntityGraph(attributePaths = "images")
+    @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.isShow = TRUE")
+    List<Product> findShowProduct(@Param("cateno") Long cateno);
 }

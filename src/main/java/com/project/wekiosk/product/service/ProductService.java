@@ -30,4 +30,6 @@ public interface ProductService {
 
     void toggleShowProduct(Long cateno, List<Long> pnoList);
 
+    List<ProductDTO> showProduct(Long cateno);
+
 }

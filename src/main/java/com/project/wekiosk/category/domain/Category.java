@@ -23,6 +23,7 @@ public class Category {
     private String catename;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_sno")
     private Store store;
 
     public Category(Long cateno) {
@@ -40,4 +41,9 @@ public class Category {
     public void setCateno(Long cateno) {
         this.cateno = cateno;
     }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
 }

@@ -37,12 +37,18 @@ public class CategoryController {
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
     @PutMapping("/{cateno}/modify")
-    public ResponseEntity<Void> updateCategory(@PathVariable Long cateno, @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<String> updateCategory(@PathVariable Long cateno, @RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(cateno, categoryDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @DeleteMapping("/{cateno}/delete")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long cateno) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long cateno) {
+        boolean hasProducts = categoryService.hasProductsInCategory(cateno);
+
+        if (hasProducts) {
+            return ResponseEntity.badRequest().body("해당 카테고리에 연결된 상품이 있어 삭제할 수 없습니다.");
+        }
+
         categoryService.deleteCategory(cateno);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

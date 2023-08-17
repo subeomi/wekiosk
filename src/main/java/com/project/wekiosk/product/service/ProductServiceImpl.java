@@ -200,6 +200,30 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    @Override
+    public List<ProductDTO> showProduct(Long cateno) {
+
+        List<Product> result = productRepository.findShowProduct(cateno);
+
+        List<ProductDTO> dtoList = result.stream()
+                .map(product -> ProductDTO.builder()
+                        .pprice(product.getPprice())
+                        .pname(product.getPname())
+                        .gimages(product.getImages().stream().map(img -> img.getFname()).collect(Collectors.toList()))
+                        .cateno(product.getCategory().getCateno())
+                        .options(product.getOptions().stream().map(option -> OptionsDTO.builder()
+                                .pno(option.getProduct().getPno())
+                                .ord(option.getOrd())
+                                .oname(option.getOname())
+                                .oprice(option.getOprice())
+                                .build()).collect(Collectors.toList()))
+                        .pno(product.getPno())
+                        .build())
+                .collect(Collectors.toList());
+
+        return dtoList;
+    }
+
 
     @Override
     public void modifyProduct(Long pno, @ModelAttribute ProductDTO productDTO) {

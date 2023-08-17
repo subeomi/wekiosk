@@ -14,4 +14,6 @@ public interface CategoryService {
     void updateCategory(Long cateno, CategoryDTO categoryDTO);
 
     void deleteCategory(Long cateno);
+
+    boolean hasProductsInCategory(Long cateno);
 }
