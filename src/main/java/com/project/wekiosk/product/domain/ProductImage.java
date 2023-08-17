@@ -17,9 +17,7 @@ public class ProductImage {
 
     private int ord;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pno") // 외래키 지정
-    private Product product;
+
 
 
 }

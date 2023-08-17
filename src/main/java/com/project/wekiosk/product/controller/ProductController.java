@@ -131,4 +131,12 @@ public class ProductController {
 
         return Map.of("result", "ok");
     }
+
+    @GetMapping("{cateno}/showProducts")
+    public List<ProductDTO> showProduct(@PathVariable("cateno") Long cateno){
+
+        List<ProductDTO> dtoList = productService.showProduct(cateno);
+
+        return  dtoList;
+    }
 }

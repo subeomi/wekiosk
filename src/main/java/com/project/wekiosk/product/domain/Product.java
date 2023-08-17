@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 @Entity
 @ToString(exclude = {"category", "images", "options"})
-//@ToString(exclude = {"images", "options"})
 public class Product {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

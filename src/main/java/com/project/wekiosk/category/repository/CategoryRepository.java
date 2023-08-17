@@ -13,7 +13,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findByCateno(Long cateno);
 
     @Query("SELECT c FROM Category c WHERE c.store.sno = :sno")
-    List<Category> getListBySno(Long sno);
+    List<Category> findCategoriesBySno(Long sno);
+    //List<Category> getListBySno(Long sno);
+
 
 
 }

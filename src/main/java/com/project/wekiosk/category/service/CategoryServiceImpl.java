@@ -6,20 +6,19 @@ import com.project.wekiosk.category.repository.CategoryRepository;
 import com.project.wekiosk.product.domain.Product;
 import com.project.wekiosk.product.domain.ProductImage;
 import com.project.wekiosk.product.repository.ProductRepository;
-
+import com.project.wekiosk.store.domain.Store;
 import com.project.wekiosk.store.domain.Store;
 import com.project.wekiosk.store.dto.StoreDTO;
-
 import com.project.wekiosk.store.repository.StoreRepository;
 import com.project.wekiosk.util.FileUploader;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Log4j2
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -39,10 +39,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getAllCategories(Long sno) {
-        List<Category> categories = categoryRepository.getListBySno(sno);
+
+        List<Category> categories = categoryRepository.findCategoriesBySno(sno);
+        System.out.println("snoooooooooooooo"+ sno);
+
+        //List<Category> categories = categoryRepository.getListBySno(sno);
+
         return categories.stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
     }
 
     @Override
@@ -62,13 +68,26 @@ public class CategoryServiceImpl implements CategoryService {
         return mapToDTO(category);
     }
 
+
     @Override
     public void registerCategory(CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setCatename(categoryDTO.getCatename());
 
+
+        Store store = storeRepository.findById(categoryDTO.getStoreSno()).orElseThrow(() -> new EntityNotFoundException("Store not found"));
+
+
+        category.setStore(store);
+
         categoryRepository.save(category);
     }
+
+
+
+
+
+
 
     @Override
     public void updateCategory(Long cateno, CategoryDTO categoryDTO) {
@@ -105,20 +124,32 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
+
     // mapToDTO: Category 엔티티 객체를 DTO 객체로 변환
     private CategoryDTO mapToDTO(Category category) {
         return CategoryDTO.builder()
                 .cateno(category.getCateno())
                 .catename(category.getCatename())
-                .sno(category.getStore().getSno())
+                .storeSno(category.getStore().getSno()) // 변경된 부분
                 .build();
     }
+
 
     private Category mapToEntity(CategoryDTO categoryDTO) {
         return Category.builder()
                 .cateno(categoryDTO.getCateno())
                 .catename(categoryDTO.getCatename())
-                .store(storeRepository.findById(categoryDTO.getSno()).orElseThrow())
+                .store(storeRepository.findById(categoryDTO.getStoreSno()).orElseThrow())
                 .build();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean hasProductsInCategory(Long cateno) {
+        Category category = categoryRepository.findById(cateno)
+                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다. cateno: " + cateno));
+
+        return productRepository.existsByCategory(category);
     }
 }

@@ -7,11 +7,20 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class CategoryDTO {
 
     private Long cateno;
     private String catename;
-    private Long sno;
+    private Long storeSno;
 
 
+    public Long getStoreSno() {
+        return storeSno;
+    }
+
+    public void setStoreSno(Long storeSno) {
+        this.storeSno = storeSno;
+    }
 }

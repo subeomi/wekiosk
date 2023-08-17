@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @ToString
 @Builder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Store {
