@@ -77,6 +77,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(pno)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다. pno: " + pno));
 
+        product.changeDel(true);
+
         List<ProductImage> images = product.getImages();
         List<String> fileNames = images.stream()
                 .map(ProductImage::getFname)
@@ -86,7 +88,8 @@ public class ProductServiceImpl implements ProductService {
         fileUploader.removeFiles(fileNames);
 
         // 상품 삭제
-        productRepository.delete(product);
+        productRepository.save(product);
+//        productRepository.delete(product);
     }
 
 

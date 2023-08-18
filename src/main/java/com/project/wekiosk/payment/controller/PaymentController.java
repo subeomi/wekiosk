@@ -45,8 +45,12 @@ public class PaymentController {
     public void paymentFcm(@RequestBody String email){
 
         String decodedEmail = UriUtils.decode(email, "UTF-8");
+
         log.info("payment fcm: " + decodedEmail);
 
+        decodedEmail = decodedEmail.substring(0, decodedEmail.length() -1);
+
+        log.info(decodedEmail);
 
         fcmNotificationService.sendPaymentInfo(decodedEmail);
     }

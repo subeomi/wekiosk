@@ -33,11 +33,11 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/{sno}/store")
-    public List<CategoryDTO> getListBySno(@PathVariable("sno") Long sno) {
-
-        return categoryService.getListBySno(sno);
-    }
+//    @GetMapping("/{sno}/store")
+//    public List<CategoryDTO> getListBySno(@PathVariable("sno") Long sno) {
+//
+//        return categoryService.getListBySno(sno);
+//    }
 
     @GetMapping("/{cateno}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable("cateno") Long cateno) {

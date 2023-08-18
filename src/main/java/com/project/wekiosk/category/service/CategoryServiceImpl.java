@@ -51,15 +51,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    @Override
-    public List<CategoryDTO> getListBySno(Long sno) {
-
-        List<Category> categories = categoryRepository.getListBySno(sno);
-        // Store 엔티티를 StoreDTO로 변환하여 리스트로 반환합니다.
-        return categories.stream()
-                .map(category -> modelMapper.map(category, CategoryDTO.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<CategoryDTO> getListBySno(Long sno) {
+//
+//        List<Category> categories = categoryRepository.getListBySno(sno);
+//        // Store 엔티티를 StoreDTO로 변환하여 리스트로 반환합니다.
+//        return categories.stream()
+//                .map(category -> modelMapper.map(category, CategoryDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public CategoryDTO getCategoryById(Long cateno) {

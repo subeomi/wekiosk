@@ -27,6 +27,8 @@ public class Product {
 
     private boolean isShow;
 
+    private boolean delFlag;
+
     @ManyToOne
     @JoinColumn(name = "cateno", referencedColumnName = "cateno")
     @JsonIgnore
@@ -81,5 +83,9 @@ public class Product {
 
     public void changeOptions(List<Options> options){
         this.options = options;
+    }
+
+    public void changeDel(boolean delFlag){
+        this.delFlag = delFlag;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -68,13 +69,12 @@ public class OrdersServiceImpl implements OrdersService {
             log.info("detail: " + detail);
 
             if (d.getOptions() != null) {
-                d.getOptions().forEach(o -> {
-                    Options option = optionsRepository.findById(o).orElseThrow();
+                d.getOptions().forEach(option -> {
                     detail.addOrderOption(option.getOrd(), option.getOname(), option.getOprice());
                 });
             }
 
-            log.info("detail: " + detail);
+            log.info("detail2222: " + detail);
 
             detailRepository.save(detail);
 

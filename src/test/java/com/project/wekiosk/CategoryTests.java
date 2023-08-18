@@ -16,9 +16,6 @@ public class CategoryTests {
     @Autowired
     private StoreRepository storeRepository;
 
-    @Autowired
-    private StoreRepository storeRepository;
-
     @Test
     public void insertCategory() {
 

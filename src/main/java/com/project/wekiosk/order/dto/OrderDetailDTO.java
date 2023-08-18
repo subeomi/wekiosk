@@ -17,5 +17,5 @@ public class OrderDetailDTO {
 
     private Long pno;
 
-    private List<Long> options;
+    private List<OrderOptionDTO> options;
 }

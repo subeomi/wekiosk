@@ -22,7 +22,7 @@ public class ProductTests {
      @Test
      public void testInsert() {
 
-         Category category = new Category(23L);
+         Category category = new Category(2L);
 
 
          for (int i = 0; i < 7; i++) {

@@ -7,7 +7,7 @@ import java.util.List;
 public interface CategoryService {
     List<CategoryDTO> getAllCategories(Long sno);
 
-    List<CategoryDTO> getListBySno(Long sno);
+//    List<CategoryDTO> getListBySno(Long sno);
 
     CategoryDTO getCategoryById(Long cateno);
 

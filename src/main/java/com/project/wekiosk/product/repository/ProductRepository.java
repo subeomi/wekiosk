@@ -20,7 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Product selectOne(@Param("pno") Long pno);
 
     @EntityGraph(attributePaths = "images")
-    @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno")
+    @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.delFlag = false")
     List<Product> findAllByCategory(Long cateno);
 
 
@@ -33,6 +33,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     boolean existsByCategory(Category category);
 
     @EntityGraph(attributePaths = "images")
-    @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.isShow = TRUE")
+    @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.isShow = TRUE AND p.delFlag = false")
     List<Product> findShowProduct(@Param("cateno") Long cateno);
 }
