@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @EntityGraph(attributePaths = "images")
     @Query("SELECT p FROM Product p WHERE p.category.cateno = :cateno AND p.delFlag = false")
-    List<Product> findAllByCategory(Long cateno);
+    List<Product> findAllByCategory(@Param("cateno") Long cateno);
 
 
     List<Product> findByCategory(Category category);

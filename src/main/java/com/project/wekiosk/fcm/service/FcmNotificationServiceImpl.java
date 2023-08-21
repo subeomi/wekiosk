@@ -48,6 +48,8 @@ public class FcmNotificationServiceImpl implements FcmNotificationService {
                 .setToken(token)
                 .build();
 
+        log.info("--------------------------------fcm sendLoginInfo");
+
         send(message);
     }
 
@@ -68,6 +70,8 @@ public class FcmNotificationServiceImpl implements FcmNotificationService {
                 .putData("body", "새로운 주문이 등록되었습니다.")
                 .setToken(token)
                 .build();
+
+        log.info("--------------------------------fcm sendPaymentInfo");
 
         send(message);
     }

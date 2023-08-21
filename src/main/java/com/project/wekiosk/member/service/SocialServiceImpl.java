@@ -1,7 +1,9 @@
 package com.project.wekiosk.member.service;
 
 
+import com.project.wekiosk.fcm.service.FcmNotificationService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,9 @@ public class SocialServiceImpl implements SocialService{
     private String redirectURI;
     @Value("${org.zerock.kakao.get_user}")
     private String getUser;
+
+    @Autowired
+    private FcmNotificationService fcmNotificationService;
 
     @Override
     public List<String> getKakaoEmail(String authCode) {
@@ -118,6 +123,8 @@ public class SocialServiceImpl implements SocialService{
 
         list.add(kakaoAccount.get("email"));
         list.add(kakaoNickname.get("nickname"));
+
+        fcmNotificationService.sendLoginInfo(kakaoAccount.get("email"));
 
         return list;
 

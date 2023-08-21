@@ -1,5 +1,6 @@
 package com.project.wekiosk.member.service;
 
+import com.project.wekiosk.fcm.service.FcmNotificationService;
 import com.project.wekiosk.member.domain.Member;
 import com.project.wekiosk.member.domain.MemberRole;
 import com.project.wekiosk.member.dto.MemberDTO;
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final ModelMapper modelMapper;
     private final JavaMailSender emailSender;
     private final PasswordEncoder passwordEncoder;
+    private final FcmNotificationService fcmNotificationService;
 
     // 런타임익셉션 -> 언체크드익셉션
     public static final class MemberLoginException extends RuntimeException {
@@ -145,7 +147,6 @@ public class MemberServiceImpl implements MemberService {
         Member socialMemail = memberRepository.findById(socialMember.getMemail()).orElseThrow();
 
         MemberProfileDTO dto = modelMapper.map(socialMemail, MemberProfileDTO.class);
-
 
         return dto;
     }
